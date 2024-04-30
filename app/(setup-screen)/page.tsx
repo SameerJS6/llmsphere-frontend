@@ -1,8 +1,8 @@
 import { PlusCircledIcon } from '@radix-ui/react-icons';
 
-import LLMCard from '@/components/llmcard';
+import LLMCard from './_components/llmcard';
 
-export default function Home() {
+export default function SetupScreen() {
   return (
     <>
       <main className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex min-h-[calc(100dvh-68px)] w-full flex-col justify-center">

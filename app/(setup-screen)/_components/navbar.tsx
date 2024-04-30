@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModeToggle } from './theme-toggle';
+import { ModeToggle } from '../../../components/theme-toggle';
 
 export default function Navbar() {
   return (
@@ -18,7 +18,7 @@ export default function Navbar() {
           >
             <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3"></path>
           </svg>
-          <h1 className="">LLM</h1>
+          <h1>LLM</h1>
         </div>
         <ModeToggle />
       </nav>
