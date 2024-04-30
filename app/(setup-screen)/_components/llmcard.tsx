@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { IconProps } from '@radix-ui/react-icons/dist/types';
+import LLMModelDetailsDialog from './llm-model-details-dialog';
 
 interface LLMCardProps {
   /**
@@ -99,11 +100,7 @@ export default function LLMCard({
           <div className="space-y-2">
             <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
             <CardFooter>
-              <Button className="mx-auto">
-                <Icon className="mr-2 size-4" />
-                {/* <PlusCircledIcon className="mr-2 size-4" /> */}
-                {buttonLabel}
-              </Button>
+              <LLMModelDetailsDialog icon={icon} label={buttonLabel} />
             </CardFooter>
           </div>
         </div>

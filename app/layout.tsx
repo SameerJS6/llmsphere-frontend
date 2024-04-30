@@ -24,7 +24,6 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <LinearGradient
-            height="100vh"
             transitionPoint="85%"
             from="transparent"
             to="var(--gradient-to)"
