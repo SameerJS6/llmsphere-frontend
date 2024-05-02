@@ -13,6 +13,7 @@ const IntegrateButton = () => {
     try {
         const body={
             username:"nitindhir1",
+            
         }
         if(localStorage.getItem("openai_apikey")){
             (body as any).OpenAI = localStorage.getItem("openai_apikey");
@@ -23,6 +24,10 @@ const IntegrateButton = () => {
         
       const data = await setCredentials(body);
       console.log(data); 
+      localStorage.removeItem("googleai_apikey");
+      localStorage.removeItem("openai_apikey");
+      
+
     } catch (error) {
       console.error('Error while calling API:', error);
     }

@@ -10,11 +10,13 @@ let googleai = '';
 async function fetchData() {
   try {
     const data = await getCredentials();
-    // if (data) {
-    //   if (data?.credentials?.OpenAI) openai = data?.credentials?.OpenAI;
-    //   if (data?.credentials?.Google_AI) googleai = data?.credentials?.Google_AI;
-    //   else if (data?.credentials?.Google_AIStudio) googleai = data?.credentials?.Google_AIStudio;
-    // }
+
+    if (data) {
+      console.log("DATA"+JSON.stringify(data));
+      if (data?.credentials?.OpenAI) openai = data?.credentials?.OpenAI;
+      if (data?.credentials?.Google_AI) googleai = data?.credentials?.Google_AI;
+      else if (data?.credentials?.Google_AIStudio) googleai = data?.credentials?.Google_AIStudio;
+    }
   } catch (error) {
     console.error("Error fetching data:", error);
   }
