@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
 import { IconProps } from '@radix-ui/react-icons/dist/types';
 import LLMModelDetailsDialog from './llm-model-details-dialog';
@@ -100,7 +99,7 @@ export default function LLMCard({
           <div className="space-y-2">
             <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
             <CardFooter>
-              <LLMModelDetailsDialog icon={icon} label={buttonLabel} />
+              <LLMModelDetailsDialog Icon={<Icon />} label={buttonLabel} />
             </CardFooter>
           </div>
         </div>
