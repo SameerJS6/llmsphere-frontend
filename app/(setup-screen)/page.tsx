@@ -12,7 +12,6 @@ async function fetchData() {
     const data = await getCredentials();
 
     if (data) {
-      console.log("DATA"+JSON.stringify(data));
       if (data?.credentials?.OpenAI) openai = data?.credentials?.OpenAI;
       if (data?.credentials?.Google_AI) googleai = data?.credentials?.Google_AI;
       else if (data?.credentials?.Google_AIStudio) googleai = data?.credentials?.Google_AIStudio;
