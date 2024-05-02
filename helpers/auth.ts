@@ -23,9 +23,9 @@ export const getCredentials =
   };
 
 export const setCredentials = async (
-  modelInfo: ISetCredentials
+  modelinfo: ISetCredentials
 ): Promise<ISetCredentialsResponse | null> => {
-  const data = { modelInfo };
+  const data = { modelinfo };
   console.log('Data before stringify: ', data);
   console.log('stringifyed data: ', JSON.stringify(data));
   try {
@@ -42,7 +42,7 @@ export const setCredentials = async (
     const response = await res.json();
     return response;
   } catch (error) {
-    console.log("Error while Setting User's Credentials: ", error);
+    console.error("Error while Setting User's Credentials: ", error);
     throw error;
   }
 };
