@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Dialog,
   DialogContent,
@@ -11,29 +13,27 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { IconProps } from '@radix-ui/react-icons/dist/types';
+import { useState } from 'react';
 
 type LLMModelDetailsDialogProps = {
   title?: string;
   description?: string;
   label: string;
-  icon: React.ForwardRefExoticComponent<
-    IconProps & React.RefAttributes<SVGSVGElement>
-  >;
+  Icon: React.ReactElement;
 };
 
 export default function LLMModelDetailsDialog({
   label,
   title,
   description,
-  icon,
+  Icon,
 }: LLMModelDetailsDialogProps) {
-  const Icon = icon;
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button className="mx-auto">
-          <Icon className="mr-2 size-4" />
+          <Icon.type {...Icon.props} className="mr-2 size-4" />
           {label}
         </Button>
       </DialogTrigger>
@@ -56,7 +56,7 @@ export default function LLMModelDetailsDialog({
           />
         </div>
         <DialogFooter>
-          <Button type="submit">Save</Button>
+          <Button onClick={() => console.log('helo')}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
