@@ -23,9 +23,9 @@ export const getCredentials =
   };
 
 export const setCredentials = async (
-  modelInfo: ISetCredentials
+  modelinfo: ISetCredentials
 ): Promise<ISetCredentialsResponse | null> => {
-  const data = { modelInfo };
+  const data = { modelinfo };
   console.log('Data before stringify: ', data);
   console.log('stringifyed data: ', JSON.stringify(data));
   try {

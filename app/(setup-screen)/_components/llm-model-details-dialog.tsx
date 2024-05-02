@@ -14,12 +14,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { ChangeEvent } from 'react';
 
 type LLMModelDetailsDialogProps = {
   title?: string;
   description?: string;
   label: string;
   Icon: React.ReactElement;
+  isConfigured?: boolean;
+
 };
 
 export default function LLMModelDetailsDialog({
@@ -27,12 +30,31 @@ export default function LLMModelDetailsDialog({
   title,
   description,
   Icon,
+  isConfigured
 }: LLMModelDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(false);
+  const [apiKey, setApiKey] = useState('');
+
+  const handleApiKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const apiKeyValue = event.target.value;
+    setApiKey(apiKeyValue);
+    setSubmitEnabled(apiKeyValue.trim() !== '');
+  };
+  const handleSubmit=()=>{
+  if(title==='Open AI Integration') {
+    localStorage.setItem("openai_apikey",apiKey);
+  }   
+  else if(title==='Google AI Integration'){
+    localStorage.setItem("googleai_apikey",apiKey);
+  
+
+  }
+  }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className="mx-auto">
+        <Button className="mx-auto" disabled={isConfigured}>
           <Icon.type {...Icon.props} className="mr-2 size-4" />
           {label}
         </Button>
@@ -53,10 +75,12 @@ export default function LLMModelDetailsDialog({
             type="text"
             className="col-span-3"
             placeholder="Enter Your API Key"
+            value={apiKey}
+            onChange={handleApiKeyChange}
           />
         </div>
         <DialogFooter>
-          <Button onClick={() => console.log('helo')}>Save</Button>
+          <Button disabled={!submitEnabled} onClick={handleSubmit}>Save</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
