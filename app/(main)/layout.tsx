@@ -1,6 +1,6 @@
 'use client';
 import Sidebar from '@/components/sidebar';
-import { useSidebarContext } from '@/components/sidebar-provider';
+import { useSidebarContext } from '@/store/sidebar-provider';
 import React from 'react';
 
 type MainLayoutProps = {
@@ -10,10 +10,11 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   const { isOpen } = useSidebarContext();
   return (
-    <main className="container h-full">
+    <main className="container relative h-full bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_5%,black)]"></div>
       <Sidebar />
       <div
-        className={` ${isOpen ? 'transition-all delay-150 duration-500 ease-out md:pl-64' : 'delay-75 duration-300 ease-out'}`}
+        className={` ${isOpen ? 'transition-all delay-150 duration-500 ease-out lg:pl-64' : 'delay-75 duration-300 ease-out'}`}
       >
         {children}
       </div>
