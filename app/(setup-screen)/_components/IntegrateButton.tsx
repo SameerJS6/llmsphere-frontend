@@ -4,14 +4,12 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { setCredentials } from '@/helpers/auth';
 import { ISetCredentials } from '@/types/credentials'
-import { checkStorageEnabled } from '@/helpers/storageAvailable';
 
 
 const IntegrateButton = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const isLocalStorageEnabled = checkStorageEnabled();
     const handleClick = async () => {
-        if (isLocalStorageEnabled) {
+        if (typeof  window !== 'undefined') {
             setIsLoading(true);
 
             try {

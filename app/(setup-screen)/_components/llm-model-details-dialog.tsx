@@ -14,7 +14,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { checkStorageEnabled } from '@/helpers/storageAvailable';
 
 type LLMModelDetailsDialogProps = {
   title?: string;
@@ -35,11 +34,10 @@ export default function LLMModelDetailsDialog({
   const [isOpen, setIsOpen] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [apiKey, setApiKey] = useState('');
-  const isLocalStorageEnabled = checkStorageEnabled();
 
 
   const handleSubmit = () => {
-    if (isLocalStorageEnabled) {
+    if (typeof  window !== 'undefined') {
       if (title === 'Open AI Integration') {
         localStorage.setItem("openai_apikey", apiKey);
       }
