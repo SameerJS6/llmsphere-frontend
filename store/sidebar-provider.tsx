@@ -8,6 +8,7 @@ import {
   useContext,
   useState,
 } from 'react';
+import { PromptArenaProvider } from './prompt-arena-provider';
 
 interface TSidebarContext {
   isOpen: boolean;
@@ -17,11 +18,11 @@ interface TSidebarContext {
 const SidebarContext = createContext({} as TSidebarContext);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
     <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
-      {children}
+      <PromptArenaProvider>{children}</PromptArenaProvider>
     </SidebarContext.Provider>
   );
 }

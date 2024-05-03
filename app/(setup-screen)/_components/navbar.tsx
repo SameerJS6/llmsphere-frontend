@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 
-import { useSidebarContext } from '@/components/sidebar-provider';
+import { useSidebarContext } from '@/store/sidebar-provider';
 import GetCurrentPathname from '@/helpers/getCurrentPathname';
 
 import { Button } from '@/components/ui/button';
@@ -13,14 +13,21 @@ import { ModeToggle } from '../../../components/theme-toggle';
 
 export default function Navbar() {
   const currentPathname = GetCurrentPathname();
-  const { setIsOpen } = useSidebarContext();
+  const { isOpen, setIsOpen } = useSidebarContext();
 
   return (
     <header className="py-4">
       <nav className="container flex items-center justify-between gap-8">
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div
+          className={`flex items-center gap-2 ${isOpen && currentPathname !== '/' ? 'transition-all delay-150 duration-500 ease-out lg:pl-64' : 'delay-75 duration-300 ease-out'} sm:gap-4`}
+        >
           {currentPathname !== '/' && (
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsOpen(true)}
+              className={`${isOpen && 'pointer-events-none invisible opacity-0 transition-all delay-100 duration-300 ease-in-out lg:sr-only'}`}
+            >
               <HamburgerMenuIcon className="size-4" />
             </Button>
           )}
