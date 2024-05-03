@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { ChangeEvent } from 'react';
+import { checkStorageEnabled } from '@/helpers/storageAvailable';
 
 type LLMModelDetailsDialogProps = {
   title?: string;
@@ -35,21 +35,21 @@ export default function LLMModelDetailsDialog({
   const [isOpen, setIsOpen] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [apiKey, setApiKey] = useState('');
+  const isLocalStorageEnabled = checkStorageEnabled();
 
-  const handleApiKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const apiKeyValue = event.target.value;
-    setApiKey(apiKeyValue);
-    setSubmitEnabled(apiKeyValue.trim() !== '');
-  };
-  const handleSubmit=()=>{
-  if(title==='Open AI Integration') {
-    localStorage.setItem("openai_apikey",apiKey);
-  }   
-  else if(title==='Google AI Integration'){
-    localStorage.setItem("googleai_apikey",apiKey);
-  
 
-  }
+  const handleSubmit = () => {
+    if (isLocalStorageEnabled) {
+      if (title === 'Open AI Integration') {
+        localStorage.setItem("openai_apikey", apiKey);
+      }
+      else if (title === 'Google AI Integration') {
+        localStorage.setItem("googleai_apikey", apiKey);
+      }
+    }
+    else {
+      console.log("No local storage available");
+    }
   }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -76,7 +76,10 @@ export default function LLMModelDetailsDialog({
             className="col-span-3"
             placeholder="Enter Your API Key"
             value={apiKey}
-            onChange={handleApiKeyChange}
+            onChange={(e) => {
+              setApiKey(e.target.value)
+              setSubmitEnabled(e.target.value.trim() !== '')
+            }}
           />
         </div>
         <DialogFooter>
