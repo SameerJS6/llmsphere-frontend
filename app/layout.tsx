@@ -4,6 +4,9 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 
 import { ThemeProvider } from '@/components/theme-providers';
+import { SidebarProvider } from '@/components/sidebar-provider';
+
+import Navbar from './(setup-screen)/_components/navbar';
 import LinearGradient from '@/components/linear-gradient';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -22,13 +25,16 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          <LinearGradient
-            transitionPoint="85%"
-            from="transparent"
-            to="var(--gradient-to)"
-            // className="hidden"
-          />
+          <SidebarProvider>
+            <Navbar />
+            {children}
+            <LinearGradient
+              transitionPoint="85%"
+              from="transparent"
+              to="var(--gradient-to)"
+              // className="hidden"
+            />
+          </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

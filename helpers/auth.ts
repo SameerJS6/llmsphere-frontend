@@ -42,7 +42,7 @@ export const setCredentials = async (
     const response = await res.json();
     return response;
   } catch (error) {
-    console.log("Error while Setting User's Credentials: ", error);
+    console.error("Error while Setting User's Credentials: ", error);
     throw error;
   }
 };
