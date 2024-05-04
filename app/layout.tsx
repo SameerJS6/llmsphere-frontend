@@ -6,7 +6,7 @@ import './globals.css';
 import { ThemeProvider } from '@/store/theme-providers';
 import { SidebarProvider } from '@/store/sidebar-provider';
 
-import Navbar from './(setup-screen)/_components/navbar';
+import Navbar from '@/components/navbar';
 import LinearGradient from '@/components/linear-gradient';
 
 const inter = Inter({ subsets: ['latin'] });
