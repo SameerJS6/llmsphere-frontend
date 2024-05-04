@@ -8,8 +8,8 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useSidebarContext } from '@/store/sidebar-provider';
 import GetCurrentPathname from '@/helpers/getCurrentPathname';
 
-import { Button } from '@/components/ui/button';
-import { ModeToggle } from '../../../components/theme-toggle';
+import { Button } from './ui/button';
+import { ModeToggle } from './theme-toggle';
 
 export default function Navbar() {
   const currentPathname = GetCurrentPathname();
