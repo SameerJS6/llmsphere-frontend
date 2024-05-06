@@ -9,7 +9,8 @@ import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { Button } from './ui/button';
 
 import GetCurrentPathname from '@/helpers/getCurrentPathname';
-import { useSidebarContext } from './sidebar-provider';
+import { useSidebarContext } from '@/store/sidebar-provider';
+//import { useSidebarContext } from './sidebar-provider';
 
 const sidebarLinks = [
   {
