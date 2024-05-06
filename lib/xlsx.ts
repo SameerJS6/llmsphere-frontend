@@ -1,7 +1,13 @@
 import xlsx, { IJsonSheet } from 'json-as-xlsx';
-import { apiResponse } from './apiResponse';
 
-export const downloadToExcel = () => {
+/**
+ * Downloads data to Excel.
+ * @param {T[]} data - The data to be downloaded to Excel.
+ * @description T - This indicates that T is a generic type parameter. It's a placeholder for a specific type that will be determined when the function is called.
+ * @returns {void}
+ */
+
+export const downloadToExcel = <T>(data: T): void => {
   let columns: IJsonSheet[] = [
     {
       sheet: 'LLM Dashboard',
@@ -26,7 +32,7 @@ export const downloadToExcel = () => {
           value: 'eval_type',
         },
       ],
-      content: apiResponse as any,
+      content: data as any,
     },
   ];
 
