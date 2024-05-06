@@ -13,18 +13,9 @@ import { convertUTC } from '@/lib/convertUTC';
 import { DotsVerticalIcon, Pencil1Icon, PlayIcon } from '@radix-ui/react-icons';
 
 import { ColumnDef } from '@tanstack/react-table';
+import { TDashboardColumn } from '@/types/dashboard.types';
 
-export type Dashboard = {
-  id: string;
-  name: string;
-  prompt_summary: string;
-  validated_on: string;
-  models: string[];
-  eval_type: string;
-  created_at: string;
-};
-
-export const columns: ColumnDef<Dashboard>[] = [
+export const columns: ColumnDef<TDashboardColumn>[] = [
   //   {
   //     id: 'select',
   //     header: ({ table }) => (
@@ -130,11 +121,8 @@ export const columns: ColumnDef<Dashboard>[] = [
   },
   {
     accessorKey: 'eval_type',
-    header: 'Eval type',
-  },
-  {
-    accessorKey: 'run',
-    header: 'Run',
+    header: () => <div className="w-16">Eval type</div>,
+    size: 300,
   },
   {
     id: 'actions',

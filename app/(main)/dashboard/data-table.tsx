@@ -46,7 +46,6 @@ export function DataTable<TData, TValue>({
     initialState: {
       columnVisibility: {
         id: false,
-        run: false,
       },
     },
     state: {
@@ -58,7 +57,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="mb-4 text-right">
-        <Button onClick={downloadToExcel} className="max-sm:w-full">
+        <Button onClick={() => downloadToExcel(data)} className="max-sm:w-full">
           <UploadIcon className="mr-2 size-4" />
           Export to Excel
         </Button>
