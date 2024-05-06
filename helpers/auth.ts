@@ -2,7 +2,7 @@ import {
   IGetCredentialsResponse,
   ISetCredentials,
   ISetCredentialsResponse,
-} from '@/types/credentials';
+} from '@/types/credentials.types';
 
 export const getCredentials =
   async (): Promise<IGetCredentialsResponse | null> => {
