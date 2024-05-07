@@ -9,67 +9,88 @@ import {
 } from '@/components/ui/hover-card';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { MultiSelect } from './multi-model-select';
-import { ModelSelector } from './model-selector';
 import { TemperatureSelector } from './temperature';
+
 import { IFrameworkModels } from '@/types/common.types';
-import { models, types } from '@/lib/data';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
-import { Input } from '@/components/ui/input';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
-
 };
 
 export default function PromptArenaRightColumn({
-  frameworks
+  frameworks,
 }: PromptArenaRightColumnProps) {
-  const { activePromptMode, openaiInput, geminiInput, variable, setVariable } = usePromptArenaContext();
+  const { activePromptMode, openaiInput, geminiInput, variable, setVariable } =
+    usePromptArenaContext();
   const combinedInput = openaiInput + geminiInput;
   // Match complete variable patterns for text within curly braces within each input individually
   const variablesWithBraces = combinedInput.match(/\{[^{}]*\}/g) || [];
-  const variableName = variablesWithBraces[0] ? variablesWithBraces[0].slice(1, -1) : '';
+  const variableName = variablesWithBraces[0]
+    ? variablesWithBraces[0].slice(1, -1)
+    : '';
   const [variableValue, setVariableValue] = useState('');
-  // Function to update input values
+
   useEffect(() => {
-    setVariable(prevState => ({ ...prevState, variable_name: variableName }));
+    setVariable((prevState) => ({ ...prevState, variable_name: variableName }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [variableName]);
 
   const handleInputChange = (value: string) => {
     setVariableValue(value);
-    setVariable(prevState => ({ ...prevState, variable_value: value }));
+    setVariable((prevState) => ({ ...prevState, variable_value: value }));
   };
   return (
     <Card>
       <CardContent>
         <div className="space-y-2 rounded-lg py-2">
-          {activePromptMode === 'prompt' &&
+          {activePromptMode === 'prompt' && (
             <div className="max-h-36 overflow-y-auto">
               <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Variable
-                </span>
-                {variable.variable_name.length === 0 && (
-              <p className="my-4 text-center text-muted-foreground">
-                No Variables
-              </p>
-            )}
+              </span>
 
-                {variable.variable_name &&
-                  <div>
-                    <span>{variable.variable_name}</span>
-                    <Input
-                      style={{ marginTop: '10px' }}
-                      type="text"
-                      value={variableValue}
-                      onChange={e => handleInputChange(e.target.value)}
-                      placeholder={`Enter value for ${variable.variable_name}`}
-                    />
-                  </div>
-                }
+              {variable.variable_name.length === 0 && (
+                <p className="my-4 text-center text-muted-foreground">
+                  No Variables
+                </p>
+              )}
+
+              {variable.variable_name && (
+                <div className="space-y-2">
+                  <span className="text-sm font-medium leading-none">
+                    {variable.variable_name}
+                  </span>
+                  <Input
+                    type="text"
+                    value={variableValue}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                    placeholder={`Enter value for ${variable.variable_name}`}
+                  />
+                </div>
+              )}
             </div>
-          }
+          )}
+
+          <div className="w-full space-y-2">
+            <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+              Mode
+            </span>
+            <Tabs defaultValue="list" className="w-full">
+              <TabsList className="w-full bg-foreground/25">
+                <TabsTrigger value="list" className="flex-1">
+                  List
+                </TabsTrigger>
+                <TabsTrigger value="template" className="flex-1">
+                  Template
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
 
           {/* {activePromptMode === 'problem' ? ( */}
           <div className="space-y-2">
@@ -83,8 +104,8 @@ export default function PromptArenaRightColumn({
                 side="left"
               >
                 The model which will generate the completion. Some models are
-                suitable for natural language tasks, others specialize in
-                code. Learn more.
+                suitable for natural language tasks, others specialize in code.
+                Learn more.
               </HoverCardContent>
             </HoverCard>
             <MultiSelect frameworks={frameworks} />
