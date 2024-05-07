@@ -8,61 +8,59 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
+import { Badge } from '@/components/ui/badge';
 import { Command as CommandPrimitive } from 'cmdk';
+
 import { Cross2Icon } from '@radix-ui/react-icons';
+
 import { IFrameworkModels } from '@/types/common.types';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
 
-
 type MultiSelectProps = {
   frameworks: IFrameworkModels[];
-
 };
 
-
-export function MultiSelect({frameworks}:MultiSelectProps) {
+export function MultiSelect({ frameworks }: MultiSelectProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const {selected, setSelected} = usePromptArenaContext();
+  const { selected, setSelected } = usePromptArenaContext();
   const [inputValue, setInputValue] = React.useState('');
 
   React.useEffect(() => {
     setSelected([frameworks[0]]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUnselect = React.useCallback((framework: IFrameworkModels) => {
     setSelected((prev) => prev.filter((s) => s.value !== framework.value));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       const input = inputRef.current;
       if (input) {
-
         if (e.key === 'Delete' || e.key === 'Backspace') {
           if (input.value === '') {
-            if(selected.length!==1){
             setSelected((prev) => {
               const newSelected = [...prev];
               newSelected.pop();
               return newSelected;
             });
           }
-          }
         }
         // This is not a default behaviour of the <input /> field
         if (e.key === 'Escape') {
           input.blur();
         }
-        
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   const selectables = frameworks.filter(
     (framework) => !selected.includes(framework)
   );
-
 
   return (
     <Command
@@ -73,11 +71,8 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
         <div className="flex flex-wrap gap-1">
           {selected?.map((framework) => {
             return (
-              <div
-                key={framework.value}
-                className="rounded-full bg-accent px-3 py-1 text-accent-foreground"
-              >
-                {framework.label}
+              <Badge key={framework?.value}>
+                {framework?.label}
                 <button
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
@@ -89,25 +84,29 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
                     e.preventDefault();
                     e.stopPropagation();
                   }}
-                  disabled={selected.length===1}
+                  disabled={selected.length === 1}
                   onClick={() => handleUnselect(framework)}
                 >
-                  <Cross2Icon className="h-3 w-3 text-muted-foreground hover:text-foreground"/>
+                  <Cross2Icon
+                    className={`${selected.length === 1 && 'sr-only opacity-0'} h-3 w-3 text-muted-foreground hover:text-foreground`}
+                  />
                 </button>
-              </div>
+              </Badge>
             );
           })}
           {/* Avoid having the "Search" Icon */}
-          {selectables.length !== 0 && <CommandPrimitive.Input
-            ref={inputRef}
-            value={inputValue}
-            onValueChange={setInputValue}
-            onBlur={() => setOpen(false)}
-            onFocus={() => setOpen(true)}
-            onClick={() => setOpen(true)}
-            placeholder="Select a model"
-            className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
-          />}
+          {selectables.length !== 0 && (
+            <CommandPrimitive.Input
+              ref={inputRef}
+              value={inputValue}
+              onValueChange={setInputValue}
+              onBlur={() => setOpen(false)}
+              onFocus={() => setOpen(true)}
+              onClick={() => setOpen(true)}
+              placeholder="Select a model"
+              className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+            />
+          )}
         </div>
       </div>
       <div className="relative mt-2">
