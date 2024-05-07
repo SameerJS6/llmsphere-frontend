@@ -14,10 +14,10 @@ import {
 interface TSidebarContext {
   activePromptMode: PromptModel;
   setActivePromptMode: Dispatch<SetStateAction<PromptModel>>;
-  inputValue: string;
-  setInputValue: Dispatch<SetStateAction<string>>;
-  secondInputValue: string;
-  setSecondInputValue: Dispatch<SetStateAction<string>>;
+  openaiInput: string;
+  setOpenaiInput: Dispatch<SetStateAction<string>>;
+  geminiInput: string;
+  setGeminiInput: Dispatch<SetStateAction<string>>;
   selected:IFrameworkModels[];
   setSelected:Dispatch<SetStateAction<IFrameworkModels[]>>;
 }
@@ -27,15 +27,15 @@ const PromptArenaContext = createContext({} as TSidebarContext);
 export function PromptArenaProvider({ children }: { children: ReactNode }) {
   const [activePromptMode, setActivePromptMode] =
     useState<PromptModel>('problem');
-    const [inputValue, setInputValue] = useState<string>('');
+    const [openaiInput, setOpenaiInput] = useState<string>('');
     const [selected, setSelected] = useState<IFrameworkModels[]>([]);
-    const [secondInputValue, setSecondInputValue] = useState<string>('');
+    const [geminiInput, setGeminiInput] = useState<string>('');
 
 
 
   return (
-    <PromptArenaContext.Provider value={{ activePromptMode, setActivePromptMode, inputValue, setInputValue,
-    secondInputValue,setSecondInputValue,selected,setSelected }}>
+    <PromptArenaContext.Provider value={{ activePromptMode, setActivePromptMode, openaiInput, setOpenaiInput,
+      geminiInput,setGeminiInput,selected,setSelected }}>
 
       {children}
     </PromptArenaContext.Provider>

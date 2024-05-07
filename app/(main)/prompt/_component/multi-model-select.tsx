@@ -82,9 +82,7 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
                   className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      if(selected.length!==1){
                       handleUnselect(framework);
-                      }
                     }
                   }}
                   onMouseDown={(e) => {
@@ -92,15 +90,15 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
                     e.stopPropagation();
                   }}
                   disabled={selected.length===1}
-                  onClick={() => {handleUnselect(framework)}}
+                  onClick={() => handleUnselect(framework)}
                 >
-                  <Cross2Icon className={selected.length===1?"h-3 w-3 text-muted-foreground ":"h-3 w-3 text-muted-foreground hover:text-foreground"} />
+                  <Cross2Icon className="h-3 w-3 text-muted-foreground hover:text-foreground"/>
                 </button>
               </div>
             );
           })}
           {/* Avoid having the "Search" Icon */}
-          {selectables.length==0 ? null : (<CommandPrimitive.Input
+          {selectables.length !== 0 && <CommandPrimitive.Input
             ref={inputRef}
             value={inputValue}
             onValueChange={setInputValue}
@@ -109,7 +107,7 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
             onClick={() => setOpen(true)}
             placeholder="Select a model"
             className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
-          />)}
+          />}
         </div>
       </div>
       <div className="relative mt-2">

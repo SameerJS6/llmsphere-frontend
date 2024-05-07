@@ -16,6 +16,7 @@ import { TemperatureSelector } from './temperature';
 import { IFrameworkModels } from '@/types/common.types';
 import { models, types } from '@/lib/data';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
+import { Input } from '@/components/ui/input';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
@@ -25,11 +26,11 @@ type PromptArenaRightColumnProps = {
 export default function PromptArenaRightColumn({
 frameworks
 }: PromptArenaRightColumnProps) {
-  const { activePromptMode,inputValue,secondInputValue } = usePromptArenaContext();
-  const combinedInput = inputValue + secondInputValue;
-  const variablesWithBraces = combinedInput.match(/\{([^}]+)\}/g) || [];
-  const variablesSet = new Set(variablesWithBraces.map(variable => variable.slice(1, -1)));
-  const variables = Array.from(variablesSet); 
+  const { activePromptMode,openaiInput,geminiInput } = usePromptArenaContext();
+  const combinedInput = openaiInput + geminiInput;
+  // Match complete variable patterns for text within curly braces within each input individually
+  const variablesWithBraces = combinedInput.match(/\{[^{}]*\}/g) || [];
+  const variables = Array.from( new Set(variablesWithBraces.map(variable => variable.slice(1, -1))));
   const [variableValues, setVariableValues] = useState<{ [key: string]: string }>({});
 
   // Function to update input values
@@ -49,10 +50,10 @@ frameworks
               <div className="space-y-2">
           {variables.map((variable, index) => (
             <div key={index}>
-              <span>{variable}</span>
-              <input
+              <span >{variable}</span>
+              <Input
+              style={{ marginTop: '10px'}}
                 type="text"
-                style={{marginLeft:"10px"}}
                 value={variableValues[variable] || ''}
                 onChange={e => handleInputChange(variable, e.target.value)}
                 placeholder={`Enter value for ${variable}`}
