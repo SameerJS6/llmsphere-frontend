@@ -22,10 +22,16 @@ async function fetchData() {
   try {
     const data = await getCredentials();
     if (data) {
-      if (data?.credentials?.OpenAI) {
+      if (
+        data?.credentials?.OpenAI &&
+        !FRAMEWORKS.some((framework) => framework.value === 'openai')
+      ) {
         FRAMEWORKS.push({ value: 'openai', label: 'OpenAI' });
       }
-      if (data?.credentials?.Google_AI || data?.credentials?.Google_AIStudio) {
+      if (
+        (data?.credentials?.Google_AI || data?.credentials?.Google_AIStudio) &&
+        !FRAMEWORKS.some((framework) => framework.value === 'gemini')
+      ) {
         FRAMEWORKS.push({ value: 'gemini', label: 'Gemini' });
       }
     }
