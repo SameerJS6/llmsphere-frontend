@@ -8,7 +8,7 @@ import { getDashboardPrompt } from '@/helpers/dashboard';
 import { TDashboardColumn } from '@/types/dashboard.types';
 
 export const metadata: Metadata = {
-  title: 'Prompt Eval Dashboard',
+  title: 'Prompt Eval Dashboard - LLM',
   description: 'The OpenAI Playground built',
 };
 
@@ -43,7 +43,9 @@ export default async function Dashboard() {
 
   return (
     <div className="relative z-10 mt-8 space-y-8">
-      <h2 className=" text-2xl font-semibold tracking-tight">Dashboard</h2>
+      <h2 className="bg-gradient-to-b from-foreground to-muted-foreground bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
+        Dashboard
+      </h2>
       <DataTable columns={columns} data={filteredResponse} />
     </div>
   );

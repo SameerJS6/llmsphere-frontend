@@ -2,108 +2,143 @@
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { usePromptArenaContext } from '@/store/prompt-arena-provider';
-import { ICreatePromptTemplateRequest, IFinalizePromptRequest, Model } from '@/types/prompts.types';
+import { toast } from 'sonner';
+
 import { createPromptTemplate, finalizePrompt } from '@/helpers/prompt-api';
+import { usePromptArenaContext } from '@/store/prompt-arena-provider';
+
+import {
+  ICreatePromptTemplateRequest,
+  IFinalizePromptRequest,
+  Model,
+} from '@/types/prompts.types';
 
 export default function PromptArenaFooter() {
-  const [isGenerateDisabled, setIsGenerateDisabled] = useState(true);
-
-  const [isSaveDisabled, setIsSaveDisabled] = useState(true);
-  const { activePromptMode, openaiInput, selected, geminiInput, variable } = usePromptArenaContext();
+  const [isDisabled, setIsDisabled] = useState({
+    isGenerateDisabled: true,
+    isSaveDisabled: true,
+  });
+  const [isLoading, setIsLoading] = useState({
+    generateLoading: false,
+    savePromptLoading: false,
+  });
+  const { activePromptMode, openaiInput, selected, geminiInput, variable } =
+    usePromptArenaContext();
 
   useEffect(() => {
-   
-    if(activePromptMode==='problem'){
-    if (openaiInput.length === 0) {
-      setIsGenerateDisabled(true);
+    if (activePromptMode === 'problem') {
+      if (openaiInput.length === 0) {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isGenerateDisabled: true,
+        }));
+      } else {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isGenerateDisabled: false,
+        }));
+      }
+    } else {
+      if (
+        (openaiInput.length === 0 && geminiInput.length === 0) ||
+        variable.variable_name === '' ||
+        variable.variable_value === ''
+      ) {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isSaveDisabled: true,
+        }));
+      } else {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isSaveDisabled: false,
+        }));
+      }
     }
-    else {
-      setIsGenerateDisabled(false);
-    }
-  }
-  else{
-    if ((openaiInput.length === 0 && geminiInput.length === 0) ||
-      variable.variable_name === '' ||
-      variable.variable_value === '') {
-      setIsSaveDisabled(true);
-    }
-    else {
-      setIsSaveDisabled(false);
-    }
-  }}, [openaiInput, geminiInput, variable,activePromptMode]);
+  }, [openaiInput, geminiInput, variable, activePromptMode]);
 
   const handleGenerateClick = async () => {
-    setIsGenerateDisabled(true);
-
+    setIsDisabled((prevState) => ({ ...prevState, isGenerateDisabled: true }));
+    setIsLoading((prevState) => ({ ...prevState, generateLoading: true }));
     try {
-
       let models: Model[] = [];
-      selected.forEach(item => {
-        if (item.value === "openai") {
+      selected.forEach((item) => {
+        if (item.value === 'openai') {
           models.push(Model.OpenAI);
-        } else if (item.value === "gemini") {
+        } else if (item.value === 'gemini') {
           models.push(Model.Gemini);
         }
       });
       let body: ICreatePromptTemplateRequest = {
-        username: "nitindhir1",
+        username: 'nitindhir1',
         problem: openaiInput,
-        models: models
+        models: models,
       };
       const data = await createPromptTemplate(body);
-      console.log("RESPONSE DATA: " + JSON.stringify(data));
-
+      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
+      toast.success('Prompt Template Generated Successfully!');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
-      setIsGenerateDisabled(false);
+      setIsLoading((prevState) => ({ ...prevState, generateLoading: false }));
+      setIsDisabled((prevState) => ({
+        ...prevState,
+        isGenerateDisabled: false,
+      }));
     }
-
   };
   const handleSaveClick = async () => {
-    setIsSaveDisabled(true);
-
+    setIsDisabled((prevState) => ({ ...prevState, isSaveDisabled: true }));
+    setIsLoading((prevState) => ({ ...prevState, savePromptLoading: true }));
     try {
-
-
       let body: IFinalizePromptRequest = {
-        prompt_id: "5ee2dede-315a-4e3f-ad79-0066fabc04bd",
+        prompt_id: '5ee2dede-315a-4e3f-ad79-0066fabc04bd',
         variable_name: variable.variable_name,
         variable_value: variable.variable_value,
         variable_type: variable.variable_type,
       };
       if (openaiInput.length !== 0) {
         body.openai_prompt = openaiInput;
-      }
-      else{
-        body.openai_prompt = "";
+      } else {
+        body.openai_prompt = '';
       }
       if (geminiInput.length !== 0) {
         body.gemini_prompt = geminiInput;
-      }
-      else{
-        body.gemini_prompt = "";
-
+      } else {
+        body.gemini_prompt = '';
       }
       const data = await finalizePrompt(body);
-      console.log("RESPONSE DATA: " + JSON.stringify(data));
-
+      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
+      toast.success('Prompt Template Updated Successfully!');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
-      setIsSaveDisabled(false);
+      setIsLoading((prevState) => ({ ...prevState, savePromptLoading: false }));
+      setIsDisabled((prevState) => ({
+        ...prevState,
+        isSaveDisabled: true,
+      }));
     }
-
   };
 
   return (
-    <div className="flex w-full flex-row-reverse justify-end gap-2">
+    <div className="flex w-full flex-row-reverse justify-start gap-2">
       {activePromptMode === 'problem' ? (
-        <Button onClick={handleGenerateClick} disabled={isGenerateDisabled}>
-          Generate</Button>
+        <Button
+          onClick={handleGenerateClick}
+          disabled={isDisabled.isGenerateDisabled}
+          className="max-lg:w-full"
+        >
+          {isLoading.generateLoading ? 'Generating...' : 'Generate'}
+        </Button>
       ) : (
-        <Button onClick={handleSaveClick} disabled={isSaveDisabled} variant="secondary">Save Prompt</Button>
+        <Button
+          onClick={handleSaveClick}
+          disabled={isDisabled.isSaveDisabled}
+          className="max-lg:w-full"
+        >
+          {isLoading.savePromptLoading ? 'Saving...' : 'Save Prompt'}
+        </Button>
       )}
     </div>
   );

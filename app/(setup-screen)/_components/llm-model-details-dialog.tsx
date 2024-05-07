@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 
 import {
   Dialog,
@@ -9,11 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+
+import { toast } from 'sonner';
 
 type LLMModelDetailsDialogProps = {
   title?: string;
@@ -21,7 +22,6 @@ type LLMModelDetailsDialogProps = {
   label: string;
   Icon: React.ReactElement;
   isConfigured?: boolean;
-
 };
 
 export default function LLMModelDetailsDialog({
@@ -29,26 +29,26 @@ export default function LLMModelDetailsDialog({
   title,
   description,
   Icon,
-  isConfigured
+  isConfigured,
 }: LLMModelDetailsDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [apiKey, setApiKey] = useState('');
 
-
   const handleSubmit = () => {
-    if (typeof  window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       if (title === 'Open AI Integration') {
-        localStorage.setItem("openai_apikey", apiKey);
+        localStorage.setItem('openai_apikey', apiKey);
+        toast('API Key for OpenAI Saved!');
+      } else if (title === 'Google AI Integration') {
+        localStorage.setItem('googleai_apikey', apiKey);
+        toast('API Key for OpenAI Saved!');
       }
-      else if (title === 'Google AI Integration') {
-        localStorage.setItem("googleai_apikey", apiKey);
-      }
+      setIsOpen(false);
+    } else {
+      console.error('No local storage available');
     }
-    else {
-      console.log("No local storage available");
-    }
-  }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -75,13 +75,15 @@ export default function LLMModelDetailsDialog({
             placeholder="Enter Your API Key"
             value={apiKey}
             onChange={(e) => {
-              setApiKey(e.target.value)
-              setSubmitEnabled(e.target.value.trim() !== '')
+              setApiKey(e.target.value);
+              setSubmitEnabled(e.target.value.trim() !== '');
             }}
           />
         </div>
         <DialogFooter>
-          <Button disabled={!submitEnabled} onClick={handleSubmit}>Save</Button>
+          <Button disabled={!submitEnabled} onClick={handleSubmit}>
+            Save
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

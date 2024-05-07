@@ -10,7 +10,7 @@ type MainLayoutProps = {
 export default function MainLayout({ children }: MainLayoutProps) {
   const { isOpen } = useSidebarContext();
   return (
-    <main className="container relative h-full bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">
+    <main className="container relative min-h-[calc(100dvh-100px)] bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-background [mask-image:radial-gradient(ellipse_at_center,transparent_5%,black)]"></div>
       <Sidebar />
       <div

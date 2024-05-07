@@ -22,7 +22,7 @@ export function TemperatureSelector({
   const [value, setValue] = React.useState(defaultValue);
 
   return (
-    <div className="pointer-events-none grid gap-2 pt-2 opacity-25">
+    <div className="pointer-events-none grid gap-2 opacity-25">
       <HoverCard openDelay={200}>
         <HoverCardTrigger asChild>
           <div className="grid gap-4">
