@@ -5,6 +5,10 @@ import { usePromptArenaContext } from '@/store/prompt-arena-provider';
 import { IFrameworkModels } from '@/types/common.types';
 
 
+interface InputValues {
+  openai: string;
+  gemini: string;
+}
 
 const PromptInput= () => {
   const { openaiInput, setOpenaiInput, selected, geminiInput, setGeminiInput } = usePromptArenaContext();
@@ -23,12 +27,9 @@ const PromptInput= () => {
         setValues(prevState => ({ ...prevState, openai: '' }));
       }
     }
-  }, [selected, setOpenaiInput, setGeminiInput]);
+  }, [selected]);
 
-  interface InputValues {
-    openai: string;
-    gemini: string;
-  }
+ 
 
 
 

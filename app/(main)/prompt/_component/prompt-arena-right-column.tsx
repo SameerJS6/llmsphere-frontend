@@ -30,7 +30,8 @@ frameworks
   const combinedInput = openaiInput + geminiInput;
   // Match complete variable patterns for text within curly braces within each input individually
   const variablesWithBraces = combinedInput.match(/\{[^{}]*\}/g) || [];
-  const variables = Array.from( new Set(variablesWithBraces.map(variable => variable.slice(1, -1))));
+  const variableSet =  new Set(variablesWithBraces.map(variable => variable.slice(1, -1)));
+  const variables = Array.from(variableSet);
   const [variableValues, setVariableValues] = useState<{ [key: string]: string }>({});
 
   // Function to update input values

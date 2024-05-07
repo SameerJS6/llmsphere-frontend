@@ -26,7 +26,6 @@ async function fetchData() {
     if (data) {
       if (data?.credentials?.OpenAI){
         FRAMEWORKS.push({value:"openai",label:"OpenAI"});
-
       } 
       if (data?.credentials?.Google_AI || data?.credentials?.Google_AIStudio) {
         FRAMEWORKS.push({value:"gemini",label:"Gemini"});

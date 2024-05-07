@@ -28,11 +28,11 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
 
   React.useEffect(() => {
     setSelected([frameworks[0]]);
-  }, [frameworks,setSelected]);
+  }, []);
 
   const handleUnselect = React.useCallback((framework: IFrameworkModels) => {
     setSelected((prev) => prev.filter((s) => s.value !== framework.value));
-  }, [setSelected]);
+  }, []);
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -57,7 +57,7 @@ export function MultiSelect({frameworks}:MultiSelectProps) {
         
       }
     },
-    [setSelected,selected.length]
+    []
   );
   const selectables = frameworks.filter(
     (framework) => !selected.includes(framework)
