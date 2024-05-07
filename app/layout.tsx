@@ -8,6 +8,7 @@ import { SidebarProvider } from '@/store/sidebar-provider';
 
 import Navbar from '@/components/navbar';
 import LinearGradient from '@/components/linear-gradient';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,6 +34,7 @@ export default function RootLayout({
               from="transparent"
               to="var(--gradient-to)"
             />
+            <Toaster theme="system" />
           </SidebarProvider>
         </ThemeProvider>
       </body>
