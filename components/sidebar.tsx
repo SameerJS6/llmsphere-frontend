@@ -10,7 +10,6 @@ import { Button } from './ui/button';
 
 import GetCurrentPathname from '@/helpers/getCurrentPathname';
 import { useSidebarContext } from '@/store/sidebar-provider';
-//import { useSidebarContext } from './sidebar-provider';
 
 const sidebarLinks = [
   {
@@ -36,10 +35,10 @@ export default function Sidebar() {
   const currentPathname = GetCurrentPathname();
   return (
     <aside
-      className={`fixed top-0 z-10 min-h-dvh w-[85%] max-w-80 rounded-e-xl border-r-[3px] border-border bg-primary-foreground px-2 py-6 shadow-sm transition-all dark:shadow-2xl sm:max-w-64 ${
+      className={`fixed top-0 z-20 min-h-dvh w-[85%] max-w-80 rounded-e-xl border-r-[3px] border-border bg-background px-2 py-6 shadow-sm transition-all dark:shadow-2xl sm:max-w-64 ${
         isOpen
           ? 'left-0 duration-500 ease-out'
-          : '-left-full duration-200 ease-in'
+          : 'pointer-events-none -left-full duration-200 ease-in'
       }`}
     >
       <Button variant="ghost" onClick={() => setIsOpen(false)} className="mb-8">

@@ -56,8 +56,7 @@ interface LLMCardProps {
    * @type boolean
    */
   isDisabled?: boolean;
-  isConfigured?:boolean;
-
+  isConfigured?: boolean;
 }
 
 export default function LLMCard({
@@ -69,7 +68,7 @@ export default function LLMCard({
   logoImageAlt,
   icon,
   isDisabled = false,
-  isConfigured
+  isConfigured,
 }: LLMCardProps) {
   const Icon = icon;
   return (
@@ -102,7 +101,12 @@ export default function LLMCard({
           <div className="space-y-2">
             <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
             <CardFooter>
-              <LLMModelDetailsDialog Icon={<Icon />} label={buttonLabel}  isConfigured={isConfigured} title={title}/>
+              <LLMModelDetailsDialog
+                Icon={<Icon />}
+                label={buttonLabel}
+                isConfigured={isConfigured}
+                title={title}
+              />
             </CardFooter>
           </div>
         </div>
