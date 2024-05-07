@@ -28,7 +28,7 @@ export enum Model {
     gemini_prompt?: string;
     openai_prompt?: string;
   }
-  interface TVariable{
+  export interface TVariable{
     variable_name:string;
     variable_type:string;
     variable_value:string;
