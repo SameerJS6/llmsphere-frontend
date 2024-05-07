@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   HoverCard,
@@ -24,65 +24,71 @@ type PromptArenaRightColumnProps = {
 };
 
 export default function PromptArenaRightColumn({
-frameworks
+  frameworks
 }: PromptArenaRightColumnProps) {
-  const { activePromptMode,openaiInput,geminiInput } = usePromptArenaContext();
+  const { activePromptMode, openaiInput, geminiInput, variable, setVariable } = usePromptArenaContext();
   const combinedInput = openaiInput + geminiInput;
   // Match complete variable patterns for text within curly braces within each input individually
   const variablesWithBraces = combinedInput.match(/\{[^{}]*\}/g) || [];
-  const variableSet =  new Set(variablesWithBraces.map(variable => variable.slice(1, -1)));
-  const variables = Array.from(variableSet);
-  const [variableValues, setVariableValues] = useState<{ [key: string]: string }>({});
-
+  const variableName = variablesWithBraces[0] ? variablesWithBraces[0].slice(1, -1) : '';
+  const [variableValue, setVariableValue] = useState('');
   // Function to update input values
-  const handleInputChange = (variable: string, value: string) => {
-    setVariableValues(prevState => ({
-      ...prevState,
-      [variable]: value
-    }));
+  useEffect(() => {
+    setVariable(prevState => ({ ...prevState, variable_name: variableName }));
+  }, [variableName]);
+
+  const handleInputChange = (value: string) => {
+    setVariableValue(value);
+    setVariable(prevState => ({ ...prevState, variable_value: value }));
   };
   return (
     <Card>
       <CardContent>
         <div className="space-y-2 rounded-lg py-2">
-          <div className="h-36">
-            <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              Variable
-              <div className="space-y-2">
-          {variables.map((variable, index) => (
-            <div key={index}>
-              <span >{variable}</span>
-              <Input
-              style={{ marginTop: '10px'}}
-                type="text"
-                value={variableValues[variable] || ''}
-                onChange={e => handleInputChange(variable, e.target.value)}
-                placeholder={`Enter value for ${variable}`}
-              />
+          {activePromptMode === 'prompt' &&
+            <div className="max-h-36 overflow-y-auto">
+              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Variable
+                </span>
+                {variable.variable_name.length === 0 && (
+              <p className="my-4 text-center text-muted-foreground">
+                No Variables
+              </p>
+            )}
+
+                {variable.variable_name &&
+                  <div>
+                    <span>{variable.variable_name}</span>
+                    <Input
+                      style={{ marginTop: '10px' }}
+                      type="text"
+                      value={variableValue}
+                      onChange={e => handleInputChange(e.target.value)}
+                      placeholder={`Enter value for ${variable.variable_name}`}
+                    />
+                  </div>
+                }
             </div>
-          ))}
-        </div>
-            </span>
-          </div>
-          
+          }
+
           {/* {activePromptMode === 'problem' ? ( */}
-            <div className="space-y-2">
-              <HoverCard openDelay={200}>
-                <HoverCardTrigger asChild>
-                  <Label htmlFor="model">Model</Label>
-                </HoverCardTrigger>
-                <HoverCardContent
-                  align="start"
-                  className="w-[260px] text-sm"
-                  side="left"
-                >
-                  The model which will generate the completion. Some models are
-                  suitable for natural language tasks, others specialize in
-                  code. Learn more.
-                </HoverCardContent>
-              </HoverCard>
-              <MultiSelect frameworks={frameworks}/>
-            </div>
+          <div className="space-y-2">
+            <HoverCard openDelay={200}>
+              <HoverCardTrigger asChild>
+                <Label htmlFor="model">Model</Label>
+              </HoverCardTrigger>
+              <HoverCardContent
+                align="start"
+                className="w-[260px] text-sm"
+                side="left"
+              >
+                The model which will generate the completion. Some models are
+                suitable for natural language tasks, others specialize in
+                code. Learn more.
+              </HoverCardContent>
+            </HoverCard>
+            <MultiSelect frameworks={frameworks} />
+          </div>
           {/* ) : (
             <ModelSelector types={types} models={models} />
           )} */}

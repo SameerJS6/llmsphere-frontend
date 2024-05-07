@@ -28,6 +28,7 @@ const IntegrateButton = () => {
                 const data = await setCredentials(body);
                 localStorage.removeItem("googleai_apikey");
                 localStorage.removeItem("openai_apikey");
+                
             } catch (error) {
                 console.error('Error while calling API:', error);
             } finally {
