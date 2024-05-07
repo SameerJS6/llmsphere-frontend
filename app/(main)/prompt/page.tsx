@@ -8,13 +8,37 @@ import { Textarea } from '@/components/ui/textarea';
 import PromptModeToggle from './_component/prompt-mode';
 import PromptArenaFooter from './_component/prompt-arena-footer';
 import PromptArenaRightColumn from './_component/prompt-arena-right-column';
-
+import { getCredentials } from '@/helpers/auth';
+import { IFrameworkModels } from '@/types/common.types';
+import PromptInput from './_component/prompt-input';
 export const metadata: Metadata = {
   title: 'Prompt Arena',
   description: 'The OpenAI Playground built',
 };
 
-export default function PromptArena() {
+let FRAMEWORKS: IFrameworkModels[] = [];
+
+async function fetchData() {
+  
+  try {
+    const data = await getCredentials();
+
+    if (data) {
+      if (data?.credentials?.OpenAI){
+        FRAMEWORKS.push({value:"openai",label:"OpenAI"});
+      } 
+      if (data?.credentials?.Google_AI || data?.credentials?.Google_AIStudio) {
+        FRAMEWORKS.push({value:"gemini",label:"Gemini"});
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+export default async function PromptArena() {
+  FRAMEWORKS=[];
+await fetchData();
+
   return (
     <div className="relative z-10 mt-8 space-y-8">
       <div className="flex items-center justify-between gap-4">
@@ -29,15 +53,12 @@ export default function PromptArena() {
               Mode toggle
             </span>
           </div>
-          <Textarea
-            rows={15}
-            id="key"
-            className="bg-background text-foreground"
-            placeholder="Enter your problem statement."
-          />
+          <PromptInput/>
+       
+
         </div>
 
-        <PromptArenaRightColumn />
+        <PromptArenaRightColumn frameworks={FRAMEWORKS} />
       </div>
       <PromptArenaFooter />
     </div>

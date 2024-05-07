@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { setCredentials } from '@/helpers/auth';
-import { ISetCredentials } from '@/types/credentials'
+import { ISetCredentials } from '@/types/credentials.types'
 
 
 const IntegrateButton = () => {
