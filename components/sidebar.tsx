@@ -21,12 +21,16 @@ const sidebarLinks = [
     slug: '/',
   },
   {
-    title: 'Embedding Dashboard',
-    slug: '/embed-dashboard',
+    title: 'Eval Dashboard',
+    slug: '/eval-dashboard',
   },
   {
-    title: 'Prompt Eval Dashboard',
-    slug: '/dashboard',
+    title: 'Prompt Dashboard',
+    slug: '/prompt-dashboard',
+  },
+  {
+    title: 'Embedding Dashboard',
+    slug: '/embed-dashboard',
   },
 ];
 
