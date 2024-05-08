@@ -19,7 +19,7 @@ const IntegrateButton = () => {
         username: 'nitindhir1',
       };
       const openAiKey = localStorage.getItem('openai_apikey');
-      const geminiKey = localStorage.getItem('gemini_apikey');
+      const geminiKey = localStorage.getItem('googleai_apikey');
 
       try {
         if (openAiKey) {
