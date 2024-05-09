@@ -124,11 +124,11 @@ export default function PromptArenaFooter() {
   return (
     <div className="flex w-full flex-row-reverse justify-start gap-2">
       {activePromptMode === 'problem' ? (
-        <Button onClick={handleGenerateClick} className="max-lg:w-full">
+        <Button onClick={() => {}} className="max-lg:w-full">
           {isLoading.generateLoading ? 'Generating...' : 'Generate'}
         </Button>
       ) : (
-        <Button onClick={handleSaveClick} className="max-lg:w-full">
+        <Button onClick={() => {}} className="max-lg:w-full">
           {isLoading.savePromptLoading ? 'Saving...' : 'Save Prompt'}
         </Button>
       )}

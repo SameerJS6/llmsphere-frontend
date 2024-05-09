@@ -12,12 +12,30 @@ type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
 };
 
-export default function PromptArenaRightColumn(props: {
+export default function PromptArenaRightColumn({
+  variable_name = '',
+  variable_value = '',
+  openai_prompt = '',
+  gemini_prompt = '',
+}: {
   variable_name: string;
   variable_value: string;
+  openai_prompt: string;
+  gemini_prompt: string;
+
   frameworks?: IFrameworkModels[];
 }) {
-  const [variableValue, setVariableValue] = useState(props?.variable_value);
+  let model = [];
+  {
+    if (!!openai_prompt) {
+      model.push('OpenAI');
+    }
+
+    if (!!gemini_prompt) {
+      model.push('Gemini');
+    }
+  }
+  const [variableValue, setVariableValue] = useState(variable_value);
 
   const handleInputChange = (value: string) => {
     setVariableValue(value);
@@ -28,33 +46,47 @@ export default function PromptArenaRightColumn(props: {
     <Card>
       <CardContent>
         <div className="space-y-2 rounded-lg py-2">
-          {activePromptMode === 'prompt' && (
+          {
             <div className="max-h-40 ">
               <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Variable
               </span>
 
-              {props?.variable_name.length === 0 && (
+              {variable_name.length === 0 && (
                 <p className="my-4 text-center text-muted-foreground">
                   No Variables
                 </p>
               )}
 
-              {props?.variable_name && (
+              {variable_name && (
                 <div className="space-y-2 overflow-y-auto ">
                   <span className="text-sm font-medium leading-none">
-                    {props.variable_name}
+                    {variable_name}
                   </span>
                   <textarea
-                    value={props?.variable_value}
+                    value={variable_value}
                     onChange={(e) => handleInputChange(e.target.value)}
-                    placeholder={`Enter value for ${props?.variable_name}`}
-                    className="h-[120px] w-full"
+                    placeholder={`Enter value for ${variable_name}`}
+                    className="h-[120px] w-full text-xs px-2 py-1"
                   />
                 </div>
               )}
             </div>
-          )}
+          }
+
+          <div className="mt-[40px] ">
+            <div className="mb-2 mt-10 text-sm font-medium">Model</div>
+            <div className="flex w-full flex-wrap gap-2 rounded-lg bg-white bg-opacity-25 px-2 py-1  ">
+              {model.map((el) => (
+                <div
+                  key={el}
+                  className="rounded-xl bg-black px-2 py-1 text-xs text-white"
+                >
+                  {el}
+                </div>
+              ))}
+            </div>
+          </div>
 
           {/* <div className="w-full space-y-2">
             <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -93,9 +125,7 @@ export default function PromptArenaRightColumn(props: {
           {/* ) : (
             <ModelSelector types={types} models={models} />
           )} */}
-          <div className="mt-10">
-            <TemperatureSelector defaultValue={[0.56]} />
-          </div>
+          <TemperatureSelector defaultValue={[0.56]} />
         </div>
       </CardContent>
     </Card>
