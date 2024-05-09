@@ -11,7 +11,6 @@ import {
   useState,
 } from 'react';
 
-
 interface TSidebarContext {
   activePromptMode: PromptModel;
   setActivePromptMode: Dispatch<SetStateAction<PromptModel>>;
@@ -28,11 +27,16 @@ interface TSidebarContext {
 const PromptArenaContext = createContext({} as TSidebarContext);
 
 export function PromptArenaProvider({ children }: { children: ReactNode }) {
-  const [activePromptMode, setActivePromptMode] = useState<PromptModel>('problem');
+  const [activePromptMode, setActivePromptMode] =
+    useState<PromptModel>('problem');
   const [openaiInput, setOpenaiInput] = useState<string>('');
   const [selected, setSelected] = useState<IFrameworkModels[]>([]);
   const [geminiInput, setGeminiInput] = useState<string>('');
-  const [variable, setVariable] = useState<TVariable>({ variable_name: '', variable_value: '',variable_type:'value' });
+  const [variable, setVariable] = useState<TVariable>({
+    variable_name: '',
+    variable_value: '',
+    variable_type: 'value',
+  });
 
   return (
     <PromptArenaContext.Provider

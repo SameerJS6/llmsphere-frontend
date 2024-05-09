@@ -14,6 +14,7 @@ import { DotsVerticalIcon, Pencil1Icon, PlayIcon } from '@radix-ui/react-icons';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { TDashboardColumn } from '@/types/dashboard.types';
+import Link from 'next/link';
 
 export const columns: ColumnDef<TDashboardColumn>[] = [
   //   {
@@ -136,7 +137,12 @@ export const columns: ColumnDef<TDashboardColumn>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem>
-              <PlayIcon fontSize={16} className="mr-2" /> Run
+              <Link
+                href={`eval-prompts/${row.getValue('id')}`}
+                className="flex flex-row items-center justify-start"
+              >
+                <PlayIcon fontSize={16} className="mr-2" /> Run
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Pencil1Icon fontSize={16} className="mr-2" /> Edit
