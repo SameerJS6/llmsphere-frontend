@@ -18,7 +18,7 @@ const metadata: Metadata = {
 async function getPromptById(id: string) {
   try {
     const data = await getPrompt(id);
-    console.log(data, 'data');
+    //console.log(data, 'data');
     return data;
   } catch (error) {
     console.log('Error while fetching prompt data');
