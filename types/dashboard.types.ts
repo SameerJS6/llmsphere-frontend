@@ -25,3 +25,30 @@ export type TDashboardColumn = {
   eval_type: string;
   created_at: string;
 };
+
+export type TEvalDashboardColumn = {
+  id: string;
+  name: string;
+  task_type: string;
+  openai_result: string;
+  gemini_result: string;
+  executed_on: string;
+};
+
+export type TEvalDashboard = {
+  id: string;
+  evaluation: TEvaluation;
+};
+
+type TEvaluation = {
+  task_id?: string;
+  prompt_id: string;
+  openai_faithful_score: number;
+  gemini_similarity: number;
+  gemini_answer: string;
+  openai_answer: string;
+  executed_on: string;
+  gemini_faithful_score: number;
+  openai_similarity: number;
+  username: string;
+};
