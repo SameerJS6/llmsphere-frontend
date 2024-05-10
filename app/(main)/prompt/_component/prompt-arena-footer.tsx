@@ -41,8 +41,8 @@ export default function PromptArenaFooter() {
     } else {
       if (
         (openaiInput.length === 0 && geminiInput.length === 0) ||
-        variable.variable_name === '' ||
-        variable.variable_value === ''
+        (variable.variable_name !== '' &&
+        variable.variable_value === '')
       ) {
         setIsDisabled((prevState) => ({
           ...prevState,
