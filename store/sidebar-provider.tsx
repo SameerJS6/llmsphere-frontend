@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 import { PromptArenaProvider } from './prompt-arena-provider';
+import { PromptEditProvider } from './prompt-edit-provider';
 
 interface TSidebarContext {
   isOpen: boolean;
@@ -22,7 +23,9 @@ export function SidebarProvider({ children }: { children: ReactNode }) {
 
   return (
     <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
-      <PromptArenaProvider>{children}</PromptArenaProvider>
+      <PromptArenaProvider>
+        <PromptEditProvider>{children}</PromptEditProvider>
+      </PromptArenaProvider>
     </SidebarContext.Provider>
   );
 }

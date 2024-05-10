@@ -4,9 +4,19 @@ import React, { useEffect, useState } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { TemperatureSelector } from './temperature';
-
+import { getTaskType } from '@/lib/taskType';
 import { IFrameworkModels } from '@/types/common.types';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
+import { Textarea } from '@/components/ui/textarea';
+import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { ChevronDownIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
+import { usePromptEditContext } from '@/store/prompt-edit-provider';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
@@ -17,12 +27,15 @@ export default function PromptArenaRightColumn({
   variable_value = '',
   openai_prompt = '',
   gemini_prompt = '',
+  isEdit = false,
+  task_type = 'Summarization',
 }: {
-  variable_name: string;
-  variable_value: string;
-  openai_prompt: string;
-  gemini_prompt: string;
-
+  variable_name?: string;
+  variable_value?: string;
+  openai_prompt?: string;
+  gemini_prompt?: string;
+  isEdit?: boolean;
+  task_type?: string;
   frameworks?: IFrameworkModels[];
 }) {
   let model = [];
@@ -36,12 +49,43 @@ export default function PromptArenaRightColumn({
     }
   }
   const [variableValue, setVariableValue] = useState(variable_value);
+  const [variableName, setVariableName] = useState(variable_name);
+  const taskIdList = ['1', '2', '3', '5', '6'];
+  const { setVariable, openaiInput, geminiInput } = usePromptEditContext();
+  const [selectedTaskType, setSelectedTaskType] = useState(task_type);
 
+  useEffect(() => {
+    setVariable((prevState) => ({
+      ...prevState,
+      variable_name: variable_name,
+      variable_value: variable_value,
+    }));
+  }, []);
+
+  useEffect(() => {
+    if (isEdit) {
+      const combinedInput = openaiInput + geminiInput;
+      // Match complete variable patterns for text within curly braces within each input individually
+      const variablesWithBraces = combinedInput.match(/\{[^{}]*\}/g) || [];
+      const variableName = variablesWithBraces[0]
+        ? variablesWithBraces[0].slice(1, -1)
+        : '';
+      setVariable((prevState) => ({
+        ...prevState,
+        variable_name: variableName,
+      }));
+      setVariableName(variableName);
+    }
+  }, [openaiInput, geminiInput]);
+
+  const handleTaskTypeSelect = (taskId: string) => {
+    setSelectedTaskType(getTaskType(taskId));
+  };
   const handleInputChange = (value: string) => {
     setVariableValue(value);
+    setVariable((prevState) => ({ ...prevState, variable_value: value }));
   };
 
-  const { activePromptMode } = usePromptArenaContext();
   return (
     <Card>
       <CardContent>
@@ -52,28 +96,62 @@ export default function PromptArenaRightColumn({
                 Variable
               </span>
 
-              {variable_name.length === 0 && (
+              {variableName.length === 0 && (
                 <p className="my-4 text-center text-muted-foreground">
                   No Variables
                 </p>
               )}
 
-              {variable_name && (
+              {variableName && (
                 <div className="space-y-2 overflow-y-auto ">
                   <span className="text-sm font-medium leading-none">
-                    {variable_name}
+                    {variableName}
                   </span>
-                  <textarea
-                    value={variable_value}
+                  <Textarea
+                    value={variableValue}
                     onChange={(e) => handleInputChange(e.target.value)}
-                    placeholder={`Enter value for ${variable_name}`}
-                    className="h-[120px] w-full text-xs px-2 py-1"
+                    placeholder={`Enter value for ${variableName}`}
+                    className="h-[120px] w-full px-2 py-1 text-xs"
                   />
                 </div>
               )}
             </div>
           }
-
+          <div>
+            <div className="max-h-50 mt-5">
+              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Task type
+              </span>
+              {isEdit && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="outline-none "
+                    >
+                      <ChevronDownIcon className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {taskIdList.map((taskId) => (
+                      <DropdownMenuItem
+                        key={taskId}
+                        onSelect={() => handleTaskTypeSelect(taskId)}
+                      >
+                        {getTaskType(taskId)}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
+            {selectedTaskType && (
+              <div className="text-sm font-medium leading-none">
+                {selectedTaskType}
+              </div>
+            )}
+          </div>
           <div className="mt-[40px] ">
             <div className="mb-2 mt-10 text-sm font-medium">Model</div>
             <div className="flex w-full flex-wrap gap-2 rounded-lg bg-white bg-opacity-25 px-2 py-1  ">
