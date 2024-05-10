@@ -27,7 +27,7 @@ export default function PromptArenaFooter() {
 
   useEffect(() => {
     if (activePromptMode === 'problem') {
-      if (openaiInput.length === 0) {
+      if (openaiInput.length === 0 && geminiInput.length===0) {
         setIsDisabled((prevState) => ({
           ...prevState,
           isGenerateDisabled: true,
@@ -69,11 +69,13 @@ export default function PromptArenaFooter() {
           models.push(Model.Gemini);
         }
       });
+
       let body: ICreatePromptTemplateRequest = {
         username: 'nitindhir1',
-        problem: openaiInput,
+        problem: openaiInput.length===0?geminiInput:openaiInput,
         models: models,
       };
+      
       const data = await createPromptTemplate(body);
       //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Generated Successfully!');
