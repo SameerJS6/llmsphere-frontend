@@ -1,10 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-
 import { Textarea } from '@/components/ui/textarea';
-
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
-
 import { IFrameworkModels } from '@/types/common.types';
 
 interface InputValues {
@@ -21,23 +18,27 @@ const PromptInput = () => {
     setGeminiInput,
     activePromptMode,
   } = usePromptArenaContext();
+
+  // Only consider the first selected option when activePromptMode is 'problem'
+  const selectedOption = activePromptMode === 'problem' ? [selected[0]] : selected;
+
   const [values, setValues] = useState<InputValues>({
     openai: openaiInput,
     gemini: geminiInput,
   });
 
   useEffect(() => {
-    if (selected.length === 1) {
-      if (selected[0]?.value === 'openai') {
+    if (selectedOption.length === 1) {
+      if (selectedOption[0]?.value === 'openai') {
         setGeminiInput('');
         setValues((prevState) => ({ ...prevState, gemini: '' }));
-      } else if (selected[0]?.value === 'gemini') {
+      } else if (selectedOption[0]?.value === 'gemini') {
         setOpenaiInput('');
         setValues((prevState) => ({ ...prevState, openai: '' }));
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [selectedOption]);
 
   const handleInputChange = (key: keyof InputValues, value: string) => {
     if (key === 'openai') {
@@ -50,14 +51,14 @@ const PromptInput = () => {
   };
 
   return (
-    <div className={selected.length === 1 ? '' : 'grid gap-4 lg:grid-cols-2'}>
-      {selected.map((option: IFrameworkModels) => (
+    <div className={selectedOption.length === 1 ? '' : 'grid gap-4 lg:grid-cols-2'}>
+      {selectedOption.map((option: IFrameworkModels) => (
         <Textarea
           key={option?.value}
           rows={15}
           id="key"
           className="bg-background text-foreground"
-          placeholder={`Enter your ${option?.label} ${activePromptMode === 'problem' ? 'Problem Statement' : 'Prompt'}`}
+          placeholder={`Enter your ${activePromptMode === 'problem' ? `Problem Statement` : `${option?.label} Prompt`}`}
           value={values[option?.value as keyof InputValues]}
           onChange={(e) =>
             handleInputChange(
@@ -72,3 +73,4 @@ const PromptInput = () => {
 };
 
 export default PromptInput;
+
