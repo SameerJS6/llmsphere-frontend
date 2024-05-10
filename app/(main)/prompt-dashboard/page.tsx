@@ -8,7 +8,7 @@ import { getDashboardPrompt } from '@/helpers/dashboard';
 import { TDashboardColumn } from '@/types/dashboard.types';
 
 export const metadata: Metadata = {
-  title: 'Prompt Eval Dashboard - LLM',
+  title: 'Prompt Dashboard - LLM',
   description: 'The OpenAI Playground built',
 };
 
