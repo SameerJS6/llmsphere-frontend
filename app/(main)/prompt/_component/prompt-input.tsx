@@ -20,7 +20,7 @@ const PromptInput = () => {
   } = usePromptArenaContext();
 
   // Only consider the first selected option when activePromptMode is 'problem'
-  const selectedOption = activePromptMode === 'problem' ? [selected[0]] : selected;
+  const selectedOption = activePromptMode === 'problem' ? [{ value: 'openai', label: 'OpenAI' }]: selected;
 
   const [values, setValues] = useState<InputValues>({
     openai: openaiInput,
