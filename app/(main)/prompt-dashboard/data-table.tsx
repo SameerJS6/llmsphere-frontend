@@ -26,11 +26,13 @@ import { UploadIcon } from '@radix-ui/react-icons';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  hideExport?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  hideExport = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -56,12 +58,17 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="mb-4 text-right">
-        <Button onClick={() => downloadToExcel(data)} className="max-sm:w-full">
-          <UploadIcon className="mr-2 size-4" />
-          Export to Excel
-        </Button>
-      </div>
+      {!hideExport && (
+        <div className="mb-4 text-right">
+          <Button
+            onClick={() => downloadToExcel(data)}
+            className="max-sm:w-full"
+          >
+            <UploadIcon className="mr-2 size-4" />
+            Export to Excel
+          </Button>
+        </div>
+      )}
 
       <div className="rounded-md border">
         <Table>

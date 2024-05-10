@@ -92,7 +92,6 @@ export default function PromptArenaRightColumn({
             </Tabs>
           </div>
 
-          {/* {activePromptMode === 'problem' ? ( */}
           <div className="space-y-2">
             <HoverCard openDelay={200}>
               <HoverCardTrigger asChild>
@@ -110,9 +109,6 @@ export default function PromptArenaRightColumn({
             </HoverCard>
             <MultiSelect frameworks={frameworks} />
           </div>
-          {/* ) : (
-            <ModelSelector types={types} models={models} />
-          )} */}
 
           <TemperatureSelector defaultValue={[0.56]} />
         </div>
