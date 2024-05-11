@@ -28,12 +28,18 @@ const IntegrateButton = () => {
         if (geminiKey) {
           body.Google_AI = geminiKey as string;
         }
-        const data = await setCredentials(body);
-        router.push('/prompt');
-        toast.success(data?.message);
+        if(openAiKey||geminiKey){
+          const data = await setCredentials(body);
+          toast.success(data?.message);
+          router.push('/prompt');
+          localStorage.removeItem('googleai_apikey');
+          localStorage.removeItem('openai_apikey');
+        }
+        else{
+          toast.error("No API was provided")
+        }
 
-        localStorage.removeItem('googleai_apikey');
-        localStorage.removeItem('openai_apikey');
+        
       } catch (error) {
         console.error('Error while calling API:', error);
       } finally {
