@@ -12,7 +12,7 @@ export const getPromptForUser = async (): Promise<IPromptResponse[] | null> => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/getpromptforuser?username=nitindhir`,
       {
         method: 'GET',
-        cache: 'no-store',
+        cache: 'no-cache',
       }
     );
     const responseData = await res.json();
@@ -30,7 +30,7 @@ export const getPrompt = async (
       `${process.env.NEXT_PUBLIC_BASE_URL}/getprompt?prompt_id=${prompt_id}`,
       {
         method: 'GET',
-        cache: 'no-store',
+        cache: 'no-cache',
       }
     );
     const responseData = await res.json();
@@ -55,6 +55,7 @@ export const createPromptTemplate = async (
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
+        cache: 'no-cache',
       }
     );
     const response = await res.json();

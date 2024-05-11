@@ -11,6 +11,7 @@ export const getCredentials =
         `${process.env.NEXT_PUBLIC_BASE_URL}//getcredentials?username=nitindhir`,
         {
           method: 'GET',
+          cache: 'no-cache',
         }
       );
       const responseData = await res.json();
