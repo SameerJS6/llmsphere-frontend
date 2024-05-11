@@ -61,6 +61,7 @@ export default function PromptArenaRightColumn({
       variable_name: variable_name,
       variable_value: variable_value,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -77,6 +78,7 @@ export default function PromptArenaRightColumn({
       }));
       setVariableName(variableName);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openaiInput, geminiInput]);
 
   const handleTaskTypeSelect = (taskId: string) => {
@@ -119,7 +121,7 @@ export default function PromptArenaRightColumn({
             </div>
           }
           <div>
-            <div className="max-h-50 mt-5">
+            <div className="max-h-50 mt-8">
               <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ">
                 Task type
               </span>
