@@ -7,19 +7,18 @@ import { Textarea } from '@/components/ui/textarea';
 
 import PromptArenaFooter from './_component/prompt-arena-footer';
 import PromptArenaRightColumn from './_component/prompt-arena-right-column';
+import { getPrompt } from '@/helpers/prompt-api';
+import PromptInput from './_component/prompt-input';
 
 const metadata: Metadata = {
   title: 'Eval Prompt Arena',
   description: 'Run the eval prompt in the prompt arena',
 };
 
-async function getPromptById(id: string): Promise<any> {
+async function getPromptById(id: string) {
   try {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_BASE_URL + '/getprompt?prompt_id=' + id
-    );
-    const data = await response.json();
-    // console.log(data, 'data');
+    const data = await getPrompt(id);
+    //console.log(data, 'data');
     return data;
   } catch (error) {
     console.log('Error while fetching prompt data');
@@ -29,10 +28,18 @@ async function getPromptById(id: string): Promise<any> {
 
 export default async function IndivPromptArena({
   params,
+  searchParams,
 }: {
   params: { id: string };
+  searchParams?: { [key: string]: string | undefined };
 }) {
   const PromptData = await getPromptById(params.id);
+  let isEdit: boolean = false;
+  if (searchParams?.mode === 'edit') {
+    isEdit = true;
+  } else {
+    isEdit = false;
+  }
   // const [loading,setLoading] = useState<boolean>(false);
 
   //   console.log(PromptData, 'from prompt');
@@ -49,36 +56,42 @@ export default async function IndivPromptArena({
       </div>
 
       <div className="grid grid-cols-5 gap-4">
-        <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
-          <div className="flex justify-between gap-4">
-            <Label htmlFor="key">OpenAI</Label>
+        {PromptData?.openai_prompt && (
+          <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
+            <div className="flex justify-between gap-4">
+              <Label htmlFor="key">OpenAI</Label>
+            </div>
+            <PromptInput
+              isEdit={isEdit}
+              promptText={PromptData?.openai_prompt}
+              model="OpenAI"
+            />
           </div>
-          <Textarea
-            rows={15}
-            className="bg-background text-foreground"
-            placeholder={`This is your OpenAI prompt `}
-            disabled
-            defaultValue={PromptData?.openai_prompt}
-          />
-        </div>
-
-        <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
-          <div className="flex justify-between gap-4">
-            <Label htmlFor="key">Gemini</Label>
+        )}
+        {PromptData?.gemini_prompt && (
+          <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
+            <div className="flex justify-between gap-4">
+              <Label htmlFor="key">Gemini</Label>
+            </div>
+            <PromptInput
+              isEdit={isEdit}
+              promptText={PromptData?.gemini_prompt}
+              model="Gemini"
+            />
           </div>
-          <Textarea
-            rows={15}
-            className="bg-background text-foreground"
-            placeholder={`This is your Gemini prompt `}
-            disabled
-            defaultValue={PromptData?.gemini_prompt}
-          />
-        </div>
+        )}
         <div className="max-lg:col-span-5 ">
-          <PromptArenaRightColumn {...PromptData} />
+          <PromptArenaRightColumn
+            variable_name={PromptData?.variable_name}
+            variable_value={PromptData?.variable_value}
+            openai_prompt={PromptData?.openai_prompt}
+            gemini_prompt={PromptData?.gemini_prompt}
+            task_type={PromptData?.task_type}
+            isEdit={isEdit}
+          />{' '}
         </div>
       </div>
-      <PromptArenaFooter />
+      <PromptArenaFooter isEdit={isEdit} id={params.id} />
     </div>
   );
 }

@@ -18,6 +18,7 @@ export enum Model {
   }
   export interface IGetPromptResponse extends TModelsPrompts,TVariable,TModels {
     username: string;
+    task_type?:string;
   }
 
   interface TModels {

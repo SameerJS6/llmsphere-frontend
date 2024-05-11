@@ -17,6 +17,7 @@ import { TemperatureSelector } from './temperature';
 
 import { IFrameworkModels } from '@/types/common.types';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
+import { Textarea } from '@/components/ui/textarea';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
@@ -65,8 +66,7 @@ export default function PromptArenaRightColumn({
                   <span className="text-sm font-medium leading-none">
                     {variable.variable_name}
                   </span>
-                  <Input
-                    type="text"
+                  <Textarea
                     value={variableValue}
                     onChange={(e) => handleInputChange(e.target.value)}
                     placeholder={`Enter value for ${variable.variable_name}`}

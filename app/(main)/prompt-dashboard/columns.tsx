@@ -145,7 +145,15 @@ export const columns: ColumnDef<TDashboardColumn>[] = [
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Pencil1Icon fontSize={16} className="mr-2" /> Edit
+              <Link
+                href={{
+                  pathname: `eval-prompts/${row.getValue('id')}`,
+                  query: { mode: 'edit' },
+                }}
+                className="flex flex-row items-center justify-start"
+              >
+                <Pencil1Icon fontSize={16} className="mr-2" /> Edit
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

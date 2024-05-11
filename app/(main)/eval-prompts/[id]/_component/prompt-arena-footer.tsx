@@ -12,38 +12,34 @@ import {
   IFinalizePromptRequest,
   Model,
 } from '@/types/prompts.types';
+import { usePromptEditContext } from '@/store/prompt-edit-provider';
 
-export default function PromptArenaFooter() {
+type PromptInputProps = {
+  isEdit?: boolean;
+  id: string;
+};
+
+export default function PromptArenaFooter({
+  isEdit = false,
+  id,
+}: PromptInputProps) {
   const [isDisabled, setIsDisabled] = useState({
-    isGenerateDisabled: true,
+    isEvaluateDisabled: true,
     isSaveDisabled: true,
   });
   const [isLoading, setIsLoading] = useState({
-    generateLoading: false,
+    evaluateLoading: false,
     savePromptLoading: false,
   });
-  const { activePromptMode, openaiInput, selected, geminiInput, variable } =
-    usePromptArenaContext();
+  const { openaiInput, geminiInput, variable } = usePromptEditContext();
 
   useEffect(() => {
-    if (activePromptMode === 'problem') {
-      if (openaiInput.length === 0) {
-        setIsDisabled((prevState) => ({
-          ...prevState,
-          isGenerateDisabled: true,
-        }));
-      } else {
-        setIsDisabled((prevState) => ({
-          ...prevState,
-          isGenerateDisabled: false,
-        }));
-      }
-    } else {
+    if (isEdit) {
       if (
         (openaiInput.length === 0 && geminiInput.length === 0) ||
-        variable.variable_name === '' ||
-        variable.variable_value === ''
-      ) {
+        (variable.variable_name !== '' &&
+        variable.variable_value === '')
+       ) {
         setIsDisabled((prevState) => ({
           ...prevState,
           isSaveDisabled: true,
@@ -55,44 +51,15 @@ export default function PromptArenaFooter() {
         }));
       }
     }
-  }, [openaiInput, geminiInput, variable, activePromptMode]);
+ 
+  }, [openaiInput, geminiInput, variable]);
 
-  const handleGenerateClick = async () => {
-    setIsDisabled((prevState) => ({ ...prevState, isGenerateDisabled: true }));
-    setIsLoading((prevState) => ({ ...prevState, generateLoading: true }));
-    try {
-      let models: Model[] = [];
-      selected.forEach((item) => {
-        if (item.value === 'openai') {
-          models.push(Model.OpenAI);
-        } else if (item.value === 'gemini') {
-          models.push(Model.Gemini);
-        }
-      });
-      let body: ICreatePromptTemplateRequest = {
-        username: 'nitindhir1',
-        problem: openaiInput,
-        models: models,
-      };
-      const data = await createPromptTemplate(body);
-      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
-      toast.success('Prompt Template Generated Successfully!');
-    } catch (error) {
-      console.error('Error while calling API:', error);
-    } finally {
-      setIsLoading((prevState) => ({ ...prevState, generateLoading: false }));
-      setIsDisabled((prevState) => ({
-        ...prevState,
-        isGenerateDisabled: false,
-      }));
-    }
-  };
   const handleSaveClick = async () => {
     setIsDisabled((prevState) => ({ ...prevState, isSaveDisabled: true }));
     setIsLoading((prevState) => ({ ...prevState, savePromptLoading: true }));
     try {
       let body: IFinalizePromptRequest = {
-        prompt_id: '5ee2dede-315a-4e3f-ad79-0066fabc04bd',
+        prompt_id: id,
         variable_name: variable.variable_name,
         variable_value: variable.variable_value,
         variable_type: variable.variable_type,
@@ -108,7 +75,7 @@ export default function PromptArenaFooter() {
         body.gemini_prompt = '';
       }
       const data = await finalizePrompt(body);
-      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
+      console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
     } catch (error) {
       console.error('Error while calling API:', error);
@@ -123,12 +90,20 @@ export default function PromptArenaFooter() {
 
   return (
     <div className="flex w-full flex-row-reverse justify-start gap-2">
-      {activePromptMode === 'problem' ? (
-        <Button onClick={() => {}} className="max-lg:w-full">
-          {isLoading.generateLoading ? 'Generating...' : 'Generate'}
+      {!isEdit ? (
+        <Button
+          onClick={() => {}}
+          //disabled={isDisabled.isEvaluateDisabled}
+          className="max-lg:w-full"
+        >
+          {isLoading.evaluateLoading ? 'Evaluating...' : 'Evaluate'}
         </Button>
       ) : (
-        <Button onClick={() => {}} className="max-lg:w-full">
+        <Button
+          onClick={handleSaveClick}
+          disabled={isDisabled.isSaveDisabled}
+          className="max-lg:w-full"
+        >
           {isLoading.savePromptLoading ? 'Saving...' : 'Save Prompt'}
         </Button>
       )}
