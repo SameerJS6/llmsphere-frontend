@@ -19,8 +19,16 @@ const PromptInput = () => {
     activePromptMode,
   } = usePromptArenaContext();
 
-  // Only consider the first selected option when activePromptMode is 'problem'
-  const selectedOption = activePromptMode === 'problem' ? [{ value: 'openai', label: 'OpenAI' }]: selected;
+  const [selectedOption,setSelectedOption]=useState([{ value: 'openai', label: 'OpenAI' }])
+  useEffect(() => {
+    if ( activePromptMode === 'problem') {
+      setSelectedOption( [{ value: 'openai', label: 'OpenAI' }]);
+    }
+    else{
+      setSelectedOption( selected);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePromptMode]);
 
   const [values, setValues] = useState<InputValues>({
     openai: openaiInput,

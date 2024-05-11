@@ -1,6 +1,6 @@
 import LLMCard from './_components/llmcard';
 import IntegrateButton from './_components/IntegrateButton';
-
+import { redirect } from 'next/navigation'
 import { getCredentials } from '@/helpers/auth';
 import { PlusCircledIcon } from '@radix-ui/react-icons';
 
@@ -15,14 +15,18 @@ async function fetchData() {
       if (data?.credentials?.Google_AI) googleai = data?.credentials?.Google_AI;
       else if (data?.credentials?.Google_AIStudio)
         googleai = data?.credentials?.Google_AIStudio;
+      
     }
-  } catch (error) {
+    } catch (error) {
     console.error('Error fetching data:', error);
   }
-}
+} 
 
 export default async function SetupScreen() {
   await fetchData();
+  if(openai && googleai){
+    redirect('/prompt')
+  }
   return (
     <>
       <main className="relative flex min-h-[calc(100dvh-68px)] w-full flex-col justify-center bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">

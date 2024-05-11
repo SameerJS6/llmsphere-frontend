@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChevronDownIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
+import { HoverCardTrigger } from '@/components/ui/hover-card';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
@@ -60,6 +61,7 @@ export default function PromptArenaRightColumn({
       variable_name: variable_name,
       variable_value: variable_value,
     }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -76,6 +78,7 @@ export default function PromptArenaRightColumn({
       }));
       setVariableName(variableName);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openaiInput, geminiInput]);
 
   const handleTaskTypeSelect = (taskId: string) => {
@@ -118,22 +121,17 @@ export default function PromptArenaRightColumn({
             </div>
           }
           <div>
-            <div className="max-h-50 mt-5">
-              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <div className="max-h-50 mt-8">
+              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ">
                 Task type
               </span>
-              {isEdit && (
+              <br />
+              {isEdit ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="outline-none "
-                    >
-                      <ChevronDownIcon className="h-4 w-4" />
-                    </Button>
+                    <Button variant="secondary">{selectedTaskType}</Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent align="end">
                     {taskIdList.map((taskId) => (
                       <DropdownMenuItem
                         key={taskId}
@@ -144,14 +142,14 @@ export default function PromptArenaRightColumn({
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
+              ) : (
+                <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  {selectedTaskType}
+                </span>
               )}
             </div>
-            {selectedTaskType && (
-              <div className="text-sm font-medium leading-none">
-                {selectedTaskType}
-              </div>
-            )}
           </div>
+
           <div className="mt-[40px] ">
             <div className="mb-2 mt-10 text-sm font-medium">Model</div>
             <div className="flex w-full flex-wrap gap-2 rounded-lg bg-white bg-opacity-25 px-2 py-1  ">
