@@ -36,7 +36,7 @@ const IntegrateButton = () => {
           localStorage.removeItem('openai_apikey');
         }
         else{
-          toast.error("No API key was entered.")
+          toast.error("No API was provided")
         }
 
         
