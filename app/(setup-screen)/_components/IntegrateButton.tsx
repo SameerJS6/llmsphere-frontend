@@ -16,7 +16,7 @@ const IntegrateButton = () => {
     if (typeof window !== 'undefined') {
       setIsLoading(true);
       let body: ISetCredentials = {
-        username: 'nitindhir1',
+        username: 'nitindhir',
       };
       const openAiKey = localStorage.getItem('openai_apikey');
       const geminiKey = localStorage.getItem('googleai_apikey');
