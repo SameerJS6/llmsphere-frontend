@@ -24,6 +24,17 @@ export default async function EvalDashboard() {
           item.evaluation.gemini_answer || 'No Response from Gemini',
         openai_result:
           item.evaluation.openai_answer || 'No Response from OpenAi',
+        score:
+          {
+            openai: {
+              similarity: item.evaluation.openai_similarity || 0,
+              faithful: item.evaluation.openai_faithful_score || 0,
+            },
+            gemini: {
+              similarity: item.evaluation.gemini_similarity || 0,
+              faithful: item.evaluation.gemini_faithful_score || 0,
+            },
+          } || 'None',
       };
     }) || [];
 

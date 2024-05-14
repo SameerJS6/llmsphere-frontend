@@ -33,6 +33,18 @@ export type TEvalDashboardColumn = {
   openai_result: string;
   gemini_result: string;
   executed_on: string;
+  score:
+    | {
+        openai: {
+          similarity: string | number;
+          faithful: string | number;
+        };
+        gemini: {
+          similarity: string | number;
+          faithful: string | number;
+        };
+      }
+    | string;
 };
 
 export type TEvalDashboard = {

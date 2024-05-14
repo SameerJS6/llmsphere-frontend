@@ -87,8 +87,51 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
   {
     accessorKey: 'score',
     header: 'Score',
-    cell: ({}) => {
-      return <p className="w-10">0</p>;
+    cell: ({ row }) => {
+      const {
+        openai,
+        gemini,
+      }: {
+        openai: {
+          similarity: number | string;
+          faithful: number | string;
+        };
+        gemini: {
+          similarity: number | string;
+          faithful: number | string;
+        };
+      } = row.getValue('score');
+      return (
+        <table className="max-w-30 border-separate border-spacing-2 overflow-x-scroll">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Similarity</th>
+              <th className="">{'  '}Faithful</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>OpenAI:</td>
+              <td className="text-center">
+                {Number(openai.similarity).toFixed(2)}
+              </td>
+              <td className="text-center">
+                {Number(openai.faithful).toFixed(2)}
+              </td>
+            </tr>
+            <tr>
+              <td>Gemini:</td>
+              <td className="text-center">
+                {Number(gemini.similarity).toFixed(2)}
+              </td>
+              <td className="text-center">
+                {Number(gemini.faithful).toFixed(2)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      );
     },
   },
   {
