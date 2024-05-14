@@ -52,14 +52,18 @@ export default function Sidebar() {
 
       <div className="space-y-2">
         {sidebarLinks.map((link, index) => (
-          <div key={index} className="relative z-10">
-            <Link
-              href={link.slug}
-              className={`inline-flex h-9 w-full items-center whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 ${currentPathname === link.slug && 'bg-accent text-accent-foreground'}`}
-            >
-              {link.title}
-            </Link>
-          </div>
+          <Button
+            key={index}
+            asChild
+            variant="ghost"
+            className={cn(
+              'w-full justify-start',
+              currentPathname === link.slug &&
+                'bg-accent text-accent-foreground'
+            )}
+          >
+            <Link href={link.slug}>{link.title}</Link>
+          </Button>
         ))}
       </div>
     </aside>
