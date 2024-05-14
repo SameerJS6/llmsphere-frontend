@@ -13,7 +13,7 @@ export const apiResponse = [
       executed_on: '2024-05-05 16:20:17',
       gemini_faithful_score: 1.0,
       openai_similarity: 0.8625554847587696,
-      username: 'nitindhir',
+      username: 'nitindhir',//
     },
   },
   {

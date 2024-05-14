@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { PromptArenaProvider } from './prompt-arena-provider';
 import { PromptEditProvider } from './prompt-edit-provider';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 interface TSidebarContext {
   isOpen: boolean;
@@ -19,7 +20,8 @@ interface TSidebarContext {
 const SidebarContext = createContext({} as TSidebarContext);
 
 export function SidebarProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const [isOpen, setIsOpen] = useState<boolean>(isDesktop);
 
   return (
     <SidebarContext.Provider value={{ isOpen, setIsOpen }}>

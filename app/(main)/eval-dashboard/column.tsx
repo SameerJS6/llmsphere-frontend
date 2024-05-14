@@ -7,8 +7,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
-import { ArrowDownUp } from 'lucide-react';
+import { ArrowDownUp, SquareArrowOutUpRight } from 'lucide-react';
 import { convertUTC } from '@/lib/convertUTC';
 
 import { ColumnDef } from '@tanstack/react-table';
@@ -115,7 +116,6 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
     cell: ({ row }) => {
       const value: string = row.getValue('gemini_result');
       return (
-        // <div className="line-clamp-1">{value}</div>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger className="mx-0 px-0 text-left">
@@ -124,6 +124,27 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
             <TooltipContent className="max-w-[400px] break-words">
               <p className="">{value}</p>
             </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Button asChild size="icon" variant="ghost">
+                <Link
+                  href={'/eval-dashboard/' + row.getValue('id') + '/report'}
+                >
+                  <SquareArrowOutUpRight size={16} />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Get More Details</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       );
