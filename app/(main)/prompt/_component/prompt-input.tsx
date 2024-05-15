@@ -28,7 +28,7 @@ const PromptInput = () => {
       setSelectedOption( selected);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activePromptMode]);
+  }, [activePromptMode,selected]);
 
   const [values, setValues] = useState<InputValues>({
     openai: openaiInput,
