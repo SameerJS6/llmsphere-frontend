@@ -51,7 +51,7 @@ export default function PromptArenaFooter({
         }));
       }
     }
- 
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openaiInput, geminiInput, variable]);
 
   const handleSaveClick = async () => {
