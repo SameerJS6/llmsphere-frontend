@@ -29,7 +29,7 @@ export function MultiSelect({ frameworks }: MultiSelectProps) {
   React.useEffect(() => {
     setSelected([frameworks[0]]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [frameworks]);
 
   const handleUnselect = React.useCallback((framework: IFrameworkModels) => {
     setSelected((prev) => prev.filter((s) => s.value !== framework.value));
