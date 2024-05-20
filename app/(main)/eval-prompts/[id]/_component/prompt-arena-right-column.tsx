@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 
 import { Card, CardContent } from '@/components/ui/card';
 import { TemperatureSelector } from './temperature';
-import { getTaskType } from '@/lib/taskType';
 import { IFrameworkModels } from '@/types/common.types';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronDownIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
 import { HoverCardTrigger } from '@/components/ui/hover-card';
+import { Badge } from '@/components/ui/badge';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];
@@ -29,14 +29,12 @@ export default function PromptArenaRightColumn({
   openai_prompt = '',
   gemini_prompt = '',
   isEdit = false,
-  task_type = 'Summarization',
 }: {
   variable_name?: string;
   variable_value?: string;
   openai_prompt?: string;
   gemini_prompt?: string;
   isEdit?: boolean;
-  task_type?: string;
   frameworks?: IFrameworkModels[];
 }) {
   let model = [];
@@ -51,9 +49,7 @@ export default function PromptArenaRightColumn({
   }
   const [variableValue, setVariableValue] = useState(variable_value);
   const [variableName, setVariableName] = useState(variable_name);
-  const taskIdList = ['1', '2', '3', '5', '6'];
   const { setVariable, openaiInput, geminiInput } = usePromptEditContext();
-  const [selectedTaskType, setSelectedTaskType] = useState(task_type);
 
   useEffect(() => {
     setVariable((prevState) => ({
@@ -81,9 +77,6 @@ export default function PromptArenaRightColumn({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openaiInput, geminiInput]);
 
-  const handleTaskTypeSelect = (taskId: string) => {
-    setSelectedTaskType(getTaskType(taskId));
-  };
   const handleInputChange = (value: string) => {
     setVariableValue(value);
     setVariable((prevState) => ({ ...prevState, variable_value: value }));
@@ -120,47 +113,15 @@ export default function PromptArenaRightColumn({
               )}
             </div>
           }
-          <div>
-            <div className="max-h-50 mt-8">
-              <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ">
-                Task type
-              </span>
-              <br />
-              {isEdit ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="secondary">{selectedTaskType}</Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {taskIdList.map((taskId) => (
-                      <DropdownMenuItem
-                        key={taskId}
-                        onSelect={() => handleTaskTypeSelect(taskId)}
-                      >
-                        {getTaskType(taskId)}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  {selectedTaskType}
-                </span>
-              )}
-            </div>
-          </div>
 
           <div className="mt-[40px] ">
             <div className="mb-2 mt-10 text-sm font-medium">Model</div>
-            <div className="flex w-full flex-wrap gap-2 rounded-lg bg-white bg-opacity-25 px-2 py-1  ">
-              {model.map((el) => (
-                <div
-                  key={el}
-                  className="rounded-xl bg-black px-2 py-1 text-xs text-white"
-                >
-                  {el}
-                </div>
-              ))}
+            <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background">
+              <div className="flex flex-wrap gap-1">
+                {model.map((el) => (
+                  <Badge key={el}>{el}</Badge>
+                ))}
+              </div>
             </div>
           </div>
 
