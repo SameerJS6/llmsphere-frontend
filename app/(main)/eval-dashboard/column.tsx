@@ -86,9 +86,6 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
   {
     accessorKey: 'executed_on',
     header: ({ column }) => {
-      useEffect(() => {
-        column.toggleSorting(true);
-      }, []);
       return (
         <Button
           variant="ghost"

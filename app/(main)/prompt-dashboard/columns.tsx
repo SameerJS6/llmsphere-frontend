@@ -81,10 +81,6 @@ export const columns: ColumnDef<TDashboardColumn>[] = [
   {
     accessorKey: 'created_at',
     header: ({ column }) => {
-      useEffect(() => {
-        column.toggleSorting(true);
-      }, []); 
-      
       return (
         <Button
           variant="ghost"
