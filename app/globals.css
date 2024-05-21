@@ -35,8 +35,22 @@
     --radius: 0.5rem;
     --gradient-to: #d7d6f4;
     --bar-chart: 262.1 83.3% 57.8%;
+    --bar-chart-1: #902bf5;
+    --bar-chart-2: #fc7b54;
+    --bar-chart-3: #bdbebe;
+    --bar-chart-4: #6c6c6c;
+    --bar-chart-5: #1a1463;
+    --bar-chart-6: #31bacd;
+
     --bar-chart-active-1: #4cb140;
     --bar-chart-active-2: #009596;
+    --bar-chart-active-3: #d99918;
+    --bar-chart-active-4: #d11248;
+    --bar-chart-active-5: #009596;
+    --bar-chart-active-6: #da1ab3;
+    --bar-chart-active-7: #35c5b9;
+
+
   }
 
   .dark {

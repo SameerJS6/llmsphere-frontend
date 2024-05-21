@@ -15,6 +15,7 @@ import { DotsVerticalIcon, Pencil1Icon, PlayIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import { TDashboardColumn } from '@/types/dashboard.types';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export const columns: ColumnDef<TDashboardColumn>[] = [
   //   {
@@ -80,6 +81,10 @@ export const columns: ColumnDef<TDashboardColumn>[] = [
   {
     accessorKey: 'created_at',
     header: ({ column }) => {
+      useEffect(() => {
+        column.toggleSorting(true);
+      }, []); 
+      
       return (
         <Button
           variant="ghost"

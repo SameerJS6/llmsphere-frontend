@@ -3,7 +3,7 @@ import React from 'react';
 
 type ScoreCardProps = {
   title: string;
-  score: string;
+  score: number;
 };
 
 export default function ScoreCard({ title, score }: ScoreCardProps) {

@@ -25,8 +25,12 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
               {label}
             </h3>
             <div className="space-y-2">
-              <p className="text-sm font-medium leading-none">{`Similarity Score: ${payload[0].value}`}</p>
-              <p className="text-sm font-medium leading-none">{`Faithful Score: ${Number(payload[1].value).toFixed(4)}`}</p>
+              {payload.map((entry, index) => (
+                <p
+                  key={index}
+                  className="text-sm font-medium leading-none"
+                >{`${entry.name}: ${Number(entry.value).toFixed(4)}`}</p>
+              ))}
             </div>
           </div>
         </HoverCardContent>

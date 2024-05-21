@@ -13,9 +13,14 @@ import { ArrowDownUp, SquareArrowOutUpRight } from 'lucide-react';
 import { convertUTC } from '@/lib/convertUTC';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { TEvalDashboardColumn } from '@/types/dashboard.types';
+import {
+  TEvalDashboardColumn,
+  TRougeScore,
+  TbleuScore,
+} from '@/types/dashboard.types';
 
 import { getTaskType } from '@/lib/taskType';
+import { useEffect } from 'react';
 
 // Task Type , Username, Result, Executed on
 
@@ -37,6 +42,24 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
       return <div className="line-clamp-1 text-xs">{value}</div>;
     },
   },
+  {
+    accessorKey: 'prompt_id',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Prompt Id <ArrowDownUp className="ml-2 size-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const value: string = row.getValue('prompt_id');
+      return <div className="line-clamp-1 text-xs">{value}</div>;
+    },
+  },
+
   {
     accessorKey: 'name',
     header: ({ column }) => {
@@ -63,6 +86,9 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
   {
     accessorKey: 'executed_on',
     header: ({ column }) => {
+      useEffect(() => {
+        column.toggleSorting(true);
+      }, []);
       return (
         <Button
           variant="ghost"
@@ -93,44 +119,104 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
         gemini,
       }: {
         openai: {
-          similarity: number | string;
-          faithful: number | string;
+          similarity?: number;
+          faithful?: number;
+          rouge?: TRougeScore;
+          bleu?: TbleuScore;
         };
         gemini: {
-          similarity: number | string;
-          faithful: number | string;
+          similarity?: number;
+          faithful?: number;
+          rouge?: TRougeScore;
+          bleu?: TbleuScore;
         };
       } = row.getValue('score');
       return (
-        <table className="max-w-30 border-separate border-spacing-2 overflow-x-scroll">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Similarity</th>
-              <th className="">{'  '}Faithful</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>OpenAI:</td>
-              <td className="text-center">
-                {Number(openai.similarity).toFixed(2)}
-              </td>
-              <td className="text-center">
-                {Number(openai.faithful).toFixed(2)}
-              </td>
-            </tr>
-            <tr>
-              <td>Gemini:</td>
-              <td className="text-center">
-                {Number(gemini.similarity).toFixed(2)}
-              </td>
-              <td className="text-center">
-                {Number(gemini.faithful).toFixed(2)}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div>
+          {!openai.similarity && !gemini.similarity ? (
+            <p>No Scores</p>
+          ) : (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="mx-0 px-0">
+                  <table className="max-w-30 border-separate border-spacing-2 overflow-x-scroll">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Similarity</th>
+                        {(openai.faithful || gemini.faithful) && (
+                          <th className="">{'  '}Faithful</th>
+                        )}
+                        {(openai.rouge || gemini.rouge) && (
+                          <th className="">{'  '}Rouge</th>
+                        )}
+                        {(openai.bleu || gemini.bleu) && (
+                          <th className="">{'  '}Bleu</th>
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>OpenAI:</td>
+                        <td className="text-center">
+                          {Number(openai.similarity).toFixed(2)}
+                        </td>
+                        {openai.faithful && (
+                          <td className="text-center">
+                            {Number(openai.faithful).toFixed(2)}
+                          </td>
+                        )}
+                        {openai.rouge && (
+                          <td className="text-center">
+                            {Number(openai.rouge.rougeLsum).toFixed(2)}
+                          </td>
+                        )}
+                        {openai.bleu && (
+                          <td className="text-center">
+                            {Number(openai.bleu.bleu).toFixed(2)}
+                          </td>
+                        )}
+                      </tr>
+                      <tr>
+                        <td>Gemini:</td>
+                        <td className="text-center">
+                          {Number(gemini.similarity).toFixed(2)}
+                        </td>
+                        {gemini.faithful && (
+                          <td className="text-center">
+                            {Number(gemini.faithful).toFixed(2)}
+                          </td>
+                        )}
+                        {gemini.rouge && (
+                          <td className="text-center">
+                            {Number(gemini.rouge.rougeLsum).toFixed(2)}
+                          </td>
+                        )}
+                        {gemini.bleu && (
+                          <td className="text-center">
+                            {Number(gemini.bleu.bleu).toFixed(2)}
+                          </td>
+                        )}
+                      </tr>
+                    </tbody>
+                  </table>
+                </TooltipTrigger>
+                <TooltipContent className=" break-words">
+                  <div className="grid gap-4 lg:grid-cols-2">
+                    <div>
+                      <p>OpenAI:</p>
+                      <pre>{JSON.stringify(openai, null, 2)}</pre>
+                    </div>
+                    <div>
+                      <p>Gemini:</p>
+                      <pre>{JSON.stringify(gemini, null, 2)}</pre>
+                    </div>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       );
     },
   },
@@ -181,7 +267,10 @@ export const EvalColumns: ColumnDef<TEvalDashboardColumn>[] = [
             <TooltipTrigger>
               <Button asChild size="icon" variant="ghost">
                 <Link
-                  href={'/eval-dashboard/' + row.getValue('id') + '/report'}
+                  href={{
+                    pathname:
+                      '/eval-dashboard/' + row.getValue('id') + '/report',
+                  }}
                 >
                   <SquareArrowOutUpRight size={16} />
                 </Link>

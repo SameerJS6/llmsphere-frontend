@@ -53,7 +53,7 @@ export default async function IndivPromptArena({
         <h2 className="bg-gradient-to-b from-foreground to-muted-foreground bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
           Prompt Arena
         </h2>
-        <TaskTypeToggle />
+        {!isEdit && <TaskTypeToggle />}
 
         {/* <PromptModeToggle /> */}
       </div>
