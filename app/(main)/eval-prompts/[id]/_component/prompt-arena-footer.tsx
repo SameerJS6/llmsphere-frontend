@@ -95,6 +95,8 @@ export default function PromptArenaFooter({
       const data = await finalizePrompt(body);
       console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
+      router.push('/prompt-dashboard');
+
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
