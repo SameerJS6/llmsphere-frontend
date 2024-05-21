@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 import { createPromptTemplate, finalizePrompt } from '@/helpers/prompt-api';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
@@ -13,6 +14,7 @@ import {
   Model,
 } from '@/types/prompts.types';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
+import { runEval } from '@/helpers/eval-api';
 
 type PromptInputProps = {
   isEdit?: boolean;
@@ -31,7 +33,8 @@ export default function PromptArenaFooter({
     evaluateLoading: false,
     savePromptLoading: false,
   });
-  const { openaiInput, geminiInput, variable } = usePromptEditContext();
+  const { openaiInput, geminiInput, variable,taskType } = usePromptEditContext();
+  const router = useRouter();
 
   useEffect(() => {
     if (isEdit) {
@@ -48,6 +51,21 @@ export default function PromptArenaFooter({
         setIsDisabled((prevState) => ({
           ...prevState,
           isSaveDisabled: false,
+        }));
+      }
+    }
+    else{
+      if(variable.variable_name !== '' &&
+      variable.variable_value === '')
+      {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isEvaluateDisabled: true,
+        }));
+      } else {
+        setIsDisabled((prevState) => ({
+          ...prevState,
+          isEvaluateDisabled: false,
         }));
       }
     }
@@ -77,23 +95,42 @@ export default function PromptArenaFooter({
       const data = await finalizePrompt(body);
       console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
+      router.push('/prompt-dashboard');
+
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
       setIsLoading((prevState) => ({ ...prevState, savePromptLoading: false }));
       setIsDisabled((prevState) => ({
         ...prevState,
-        isSaveDisabled: true,
+        isSaveDisabled: false,
       }));
     }
   };
+  const handleEvaluateClick = async () => {
+    setIsDisabled((prevState) => ({ ...prevState, isEvaluateDisabled: true }));
+    setIsLoading((prevState) => ({ ...prevState, evaluateLoading: true }));
+    try {
+      const data = await runEval(id,taskType);
+      toast.success('Ran Eval Successfully!');
+      router.push('/eval-dashboard');
 
+    } catch (error) {
+      console.error('Error while calling API:', error);
+    } finally {
+      setIsLoading((prevState) => ({ ...prevState, evaluateLoading: false }));
+      setIsDisabled((prevState) => ({
+        ...prevState,
+        isEvaluateDisabled: false,
+      }));
+    }
+  };
   return (
     <div className="flex w-full flex-row-reverse justify-start gap-2">
       {!isEdit ? (
         <Button
-          onClick={() => {}}
-          //disabled={isDisabled.isEvaluateDisabled}
+          onClick={handleEvaluateClick}
+          disabled={isDisabled.isEvaluateDisabled}
           className="max-lg:w-full"
         >
           {isLoading.evaluateLoading ? 'Evaluating...' : 'Evaluate'}

@@ -48,6 +48,7 @@ export function DataTable<TData, TValue>({
     initialState: {
       columnVisibility: {
         id: false,
+        prompt_id: false,
       },
     },
     state: {

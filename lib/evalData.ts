@@ -3,7 +3,7 @@ export const apiResponse = [
     id: '06546230-f96e-4792-bfae-af6048eb5918',
     evaluation: {
       task_id: '2',
-      prompt_id: '2505e35f-b62f-42b4-8e8b-38a76004fb57',
+      prompt_id: '5903eb20-7c3b-488b-915c-bca6be328360',
       openai_faithful_score: 1.0,
       gemini_similarity: 0.8499848656660862,
       gemini_answer:
@@ -30,6 +30,7 @@ export const apiResponse = [
       gemini_faithful_score: 1.0,
       openai_similarity: 0.8796566924603867,
       username: 'nitindhir',
+      task_id:'2'
     },
   },
   {
@@ -45,6 +46,7 @@ export const apiResponse = [
       gemini_faithful_score: NaN,
       openai_similarity: 0.8625554847587696,
       username: 'nitindhir',
+      task_id:'2'
     },
   },
 ];

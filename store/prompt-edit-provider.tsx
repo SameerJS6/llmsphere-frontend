@@ -18,6 +18,8 @@ interface TSidebarContext {
   setGeminiInput: Dispatch<SetStateAction<string>>;
   variable: TVariable;
   setVariable: Dispatch<SetStateAction<TVariable>>;
+  taskType: string;
+  setTaskType: Dispatch<SetStateAction<string>>;
 }
 
 const PromptEditContext = createContext({} as TSidebarContext);
@@ -25,6 +27,7 @@ const PromptEditContext = createContext({} as TSidebarContext);
 export function PromptEditProvider({ children }: { children: ReactNode }) {
   const [openaiInput, setOpenaiInput] = useState<string>('');
   const [geminiInput, setGeminiInput] = useState<string>('');
+  const [taskType, setTaskType] = useState<string>('1');
   const [variable, setVariable] = useState<TVariable>({
     variable_name: '',
     variable_value: '',
@@ -40,6 +43,8 @@ export function PromptEditProvider({ children }: { children: ReactNode }) {
         setGeminiInput,
         variable,
         setVariable,
+        taskType,
+        setTaskType,
       }}
     >
       {children}

@@ -40,6 +40,10 @@ export default async function Dashboard() {
         validated_on: 'On My Machine',
       };
     }) || [];
+  filteredResponse.sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  );
 
   return (
     <div className="relative z-10 mt-8 space-y-8">

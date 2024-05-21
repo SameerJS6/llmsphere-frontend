@@ -15,6 +15,7 @@ import { DotsVerticalIcon, Pencil1Icon, PlayIcon } from '@radix-ui/react-icons';
 import { ColumnDef } from '@tanstack/react-table';
 import { TDashboardColumn } from '@/types/dashboard.types';
 import Link from 'next/link';
+import { useEffect } from 'react';
 
 export const columns: ColumnDef<TDashboardColumn>[] = [
   //   {

@@ -50,7 +50,7 @@ export default function PromptArenaRightColumn({
       <CardContent>
         <div className="space-y-2 rounded-lg py-2">
           {activePromptMode === 'prompt' && (
-            <div className="max-h-36 overflow-y-auto">
+            <div className="max-h-40 ">
               <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 Variable
               </span>
@@ -62,7 +62,7 @@ export default function PromptArenaRightColumn({
               )}
 
               {variable.variable_name && (
-                <div className="space-y-2">
+                <div className="space-y-2 overflow-y-auto ">
                   <span className="text-sm font-medium leading-none">
                     {variable.variable_name}
                   </span>

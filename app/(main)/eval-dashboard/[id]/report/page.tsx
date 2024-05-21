@@ -5,32 +5,86 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import ScoreCard from './_component/score-card';
 import LinearChart from './_component/BarChart';
+import { getEvalDashboard } from '@/helpers/eval-api';
+import { TEvalDashboardColumn } from '@/types/dashboard.types';
 
 type EvalReportProps = {
   params: { id: string };
 };
 
-export default function EvalReport({ params }: EvalReportProps) {
-  const data = [
+export default async function EvalReport({ params }: EvalReportProps) {
+  const fetchedData = (await getEvalDashboard()) || [];
+  const filteredData = fetchedData.filter((item: any) => item.id === params.id);
+  const evalData = filteredData[0];
+
+  var data = [
     {
       name: 'OpenAI',
-      Similarity_Score: 0.2,
-      Faithfull_Score: 0.8499848656660862,
+      Similarity_Score: evalData.evaluation.score?.openai_similarity,
+      Faithfull_Score: evalData.evaluation.score?.openai_faithful_score,
+      Bleu_Score: evalData.evaluation.score?.bleu_openai_score?.bleu,
+      RougeL_Score: evalData.evaluation.score?.openai_rouge_score?.rougeL,
+      RougeLSum_Score: evalData.evaluation.score?.openai_rouge_score?.rougeLsum,
+      Rouge1_Score: evalData.evaluation.score?.openai_rouge_score?.rouge1,
+      Rouge2_Score: evalData.evaluation.score?.openai_rouge_score?.rouge2,
     },
     {
       name: 'Gemini',
-      Similarity_Score: 0.5,
-      Faithfull_Score: 0.8625554847587696,
+      Similarity_Score: evalData.evaluation.score?.gemini_similarity,
+      Faithfull_Score: evalData.evaluation.score?.gemini_faithful_score,
+      Bleu_Score: evalData.evaluation.score?.bleu_gemini_score?.bleu,
+      RougeL_Score: evalData.evaluation.score?.gemini_rouge_score?.rougeL,
+      RougeLSum_Score: evalData.evaluation.score?.gemini_rouge_score?.rougeLsum,
+      Rouge1_Score: evalData.evaluation.score?.gemini_rouge_score?.rouge1,
+      Rouge2_Score: evalData.evaluation.score?.gemini_rouge_score?.rouge2,
     },
   ];
 
   return (
     <main className="relative z-10 my-8 space-y-8">
       <div className="flex flex-wrap items-center gap-4">
-        <ScoreCard title="OpenAI Faithful Score" score="1.0" />
-        <ScoreCard title="Gemini Faithful Score" score="1.0" />
-        <ScoreCard title="OpenAI Similarity" score="0.8499848656660862" />
-        <ScoreCard title="Gemini Similarity" score="0.8625554847587696" />
+        {data[0].Similarity_Score !== undefined && (
+          <ScoreCard
+            title="OpenAI Similarity"
+            score={data[0].Similarity_Score}
+          />
+        )}
+        {data[1].Similarity_Score !== undefined && (
+          <ScoreCard
+            title="Gemini Similarity"
+            score={data[1].Similarity_Score}
+          />
+        )}
+        {data[0].Faithfull_Score !== undefined && (
+          <ScoreCard
+            title="OpenAI Faithful Score"
+            score={data[0].Faithfull_Score}
+          />
+        )}
+        {data[1].Faithfull_Score !== undefined && (
+          <ScoreCard
+            title="Gemini Faithful Score"
+            score={data[1].Faithfull_Score}
+          />
+        )}
+        {data[0].RougeLSum_Score !== undefined && (
+          <ScoreCard
+            title="OpenAI Rouge Score"
+            score={data[0].RougeLSum_Score}
+          />
+        )}
+        {data[1].RougeLSum_Score !== undefined && (
+          <ScoreCard
+            title="Gemini Rouge Score"
+            score={data[1].RougeLSum_Score}
+          />
+        )}
+        {data[1].Bleu_Score !== undefined && (
+          <ScoreCard title="Gemini Bleu Score" score={data[1].Bleu_Score} />
+        )}
+        {data[0].Bleu_Score !== undefined && (
+          <ScoreCard title="OpenAI Bleu Score" score={data[0].Bleu_Score} />
+        )}
       </div>
       <div className="flex flex-col gap-4 max-xl:items-start xl:flex-row">
         <LinearChart data={data} />
@@ -43,13 +97,9 @@ export default function EvalReport({ params }: EvalReportProps) {
             <ScrollArea className="h-[150px]">
               <CardContent>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor
-                  perspiciatis doloremque rem maxime cum vel et quidem obcaecati
-                  vero consequatur eaque aspernatur ut, veniam totam, architecto
-                  impedit quod quae facere magnam sequi. Totam maiores
-                  dignissimos consequuntur magni repudiandae vitae. Ea rem quis
-                  fugiat veritatis possimus perferendis perspiciatis quasi
-                  asperiores obcaecati.
+                  {evalData.evaluation.score?.openai_answer
+                    ? evalData.evaluation.score?.openai_answer
+                    : 'No OpenAI response'}
                 </p>
               </CardContent>
             </ScrollArea>
@@ -62,20 +112,9 @@ export default function EvalReport({ params }: EvalReportProps) {
             <ScrollArea className="mask h-[150px]">
               <CardContent>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo,
-                  omnis. Vitae quis, nobis veniam commodi alias, debitis hic
-                  dicta sequi facilis temporibus dolores, ipsam placeat
-                  reiciendis. Officiis magni ea aliquam quaerat quidem repellat
-                  soluta et sapiente necessitatibus consequatur perferendis
-                  mollitia illo assumenda debitis vitae rem labore similique
-                  molestias, alias ipsa itaque nam inventore tempora quis?
-                  Aliquid ullam voluptatum, fugiat, cumque quibusdam commodi
-                  cupiditate quasi qui quisquam molestiae assumenda pariatur
-                  repudiandae rem distinctio doloremque excepturi, aspernatur
-                  odit beatae dolorum! Facilis at earum nisi deserunt
-                  accusantium recusandae reiciendis, amet nostrum voluptatibus
-                  quas quam! Ea distinctio vel cum explicabo eos totam delectus
-                  quas.
+                  {evalData.evaluation.score?.gemini_answer
+                    ? evalData.evaluation.score?.gemini_answer
+                    : 'No Gemini response'}
                 </p>
               </CardContent>
             </ScrollArea>
