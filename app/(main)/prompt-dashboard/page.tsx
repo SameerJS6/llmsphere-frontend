@@ -44,6 +44,7 @@ export default async function Dashboard() {
     (a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
+  //console.log(JSON.stringify(filteredResponse));
 
   return (
     <div className="relative z-10 mt-8 space-y-8">

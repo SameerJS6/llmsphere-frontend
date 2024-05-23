@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
+import { useRouter } from 'next/navigation';
 import { createPromptTemplate, finalizePrompt } from '@/helpers/prompt-api';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
 
@@ -24,6 +24,7 @@ export default function PromptArenaFooter() {
   });
   const { activePromptMode, openaiInput, selected, geminiInput, variable } =
     usePromptArenaContext();
+    const router = useRouter();
 
   useEffect(() => {
     if (activePromptMode === 'problem') {
@@ -70,13 +71,15 @@ export default function PromptArenaFooter() {
         }
       });
       let body: ICreatePromptTemplateRequest = {
-        username: 'nitindhir1',
+        username: 'nitindhir',
         problem: openaiInput,
         models: models,
       };
       const data = await createPromptTemplate(body);
-      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
+      //console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Generated Successfully!');
+      router.push('/prompt-dashboard');
+
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
@@ -110,6 +113,8 @@ export default function PromptArenaFooter() {
       const data = await finalizePrompt(body);
       //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
+      router.push('/prompt-dashboard');
+
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
