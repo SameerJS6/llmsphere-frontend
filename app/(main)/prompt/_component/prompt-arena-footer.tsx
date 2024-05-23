@@ -12,6 +12,8 @@ import {
   IFinalizePromptRequest,
   Model,
 } from '@/types/prompts.types';
+import { useRouter } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export default function PromptArenaFooter() {
   const [isDisabled, setIsDisabled] = useState({
@@ -24,7 +26,7 @@ export default function PromptArenaFooter() {
   });
   const { activePromptMode, openaiInput, selected, geminiInput, variable } =
     usePromptArenaContext();
-
+  const router = useRouter();
   useEffect(() => {
     if (activePromptMode === 'problem') {
       if (openaiInput.length === 0) {
@@ -41,8 +43,7 @@ export default function PromptArenaFooter() {
     } else {
       if (
         (openaiInput.length === 0 && geminiInput.length === 0) ||
-        (variable.variable_name !== '' &&
-        variable.variable_value === '')
+        (variable.variable_name !== '' && variable.variable_value === '')
       ) {
         setIsDisabled((prevState) => ({
           ...prevState,
@@ -70,13 +71,14 @@ export default function PromptArenaFooter() {
         }
       });
       let body: ICreatePromptTemplateRequest = {
-        username: 'nitindhir1',
+        username: 'nitindhir',
         problem: openaiInput,
         models: models,
       };
       const data = await createPromptTemplate(body);
-      //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Generated Successfully!');
+      router.push('/prompt-dashboard');
+      revalidatePath('/prompt-dashboard');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
