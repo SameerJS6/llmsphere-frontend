@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { TemperatureSelector } from './temperature';
+import { TemperatureSelector } from '@/components/temperature';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
