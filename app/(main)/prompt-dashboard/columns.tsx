@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -14,32 +16,8 @@ import { DotsVerticalIcon, Pencil1Icon, PlayIcon } from '@radix-ui/react-icons';
 
 import { ColumnDef } from '@tanstack/react-table';
 import { TDashboardColumn } from '@/types/dashboard.types';
-import Link from 'next/link';
-import { useEffect } from 'react';
 
 export const columns: ColumnDef<TDashboardColumn>[] = [
-  //   {
-  //     id: 'select',
-  //     header: ({ table }) => (
-  //       <input
-  //         type="checkbox"
-  //         checked={table.getIsAllPageRowsSelected()}
-  //         className={
-  //           table.getIsSomePageRowsSelected() ? 'indeterminate:bg-red-400' : ''
-  //         }
-  //         onChange={(e) => table.toggleAllPageRowsSelected(e.target.checked)}
-  //         aria-label="Select All"
-  //       />
-  //     ),
-  //     cell: ({ row }) => (
-  //       <input
-  //         type="checkbox"
-  //         checked={row.getIsSelected()}
-  //         onChange={(e) => row.toggleSelected(e.target.checked)}
-  //         aria-label="Select Row"
-  //       />
-  //     ),
-  //   },
   {
     accessorKey: 'id',
     header: ({ column }) => {
