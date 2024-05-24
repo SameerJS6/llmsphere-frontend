@@ -5,8 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import ScoreCard from './_component/score-card';
 import LinearChart from './_component/BarChart';
+
 import { getEvalDashboard } from '@/helpers/eval-api';
-import { TEvalDashboardColumn } from '@/types/dashboard.types';
 
 type EvalReportProps = {
   params: { id: string };
@@ -14,10 +14,10 @@ type EvalReportProps = {
 
 export default async function EvalReport({ params }: EvalReportProps) {
   const fetchedData = (await getEvalDashboard()) || [];
-  const filteredData = fetchedData.filter((item: any) => item.id === params.id);
+  const filteredData = fetchedData.filter((item) => item.id === params.id);
   const evalData = filteredData[0];
 
-  var data = [
+  const data = [
     {
       name: 'OpenAI',
       Similarity_Score: evalData.evaluation.score?.openai_similarity,
@@ -86,15 +86,15 @@ export default async function EvalReport({ params }: EvalReportProps) {
           <ScoreCard title="OpenAI Bleu Score" score={data[0].Bleu_Score} />
         )}
       </div>
-      <div className="flex flex-col gap-4 max-xl:items-start xl:flex-row">
+      <div className="flex flex-col gap-4 max-sm:items-start xl:flex-row">
         <LinearChart data={data} />
 
-        <div className="flex-1 space-y-4">
+        <div className="flex-1 gap-4 max-lg:space-y-4 lg:flex xl:block xl:space-y-4">
           <Card className="flex-1">
             <CardHeader>
               <CardTitle>OpenAI Answer</CardTitle>
             </CardHeader>
-            <ScrollArea className="h-[150px]">
+            <ScrollArea className="max-h-[150px] xl:h-[150px]">
               <CardContent>
                 <p>
                   {evalData.evaluation.score?.openai_answer
@@ -109,7 +109,7 @@ export default async function EvalReport({ params }: EvalReportProps) {
             <CardHeader>
               <CardTitle>Gemini Answer</CardTitle>
             </CardHeader>
-            <ScrollArea className="mask h-[150px]">
+            <ScrollArea className="max-h-[150px] xl:h-[150px]">
               <CardContent>
                 <p>
                   {evalData.evaluation.score?.gemini_answer

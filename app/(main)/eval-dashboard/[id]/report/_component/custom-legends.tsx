@@ -9,7 +9,7 @@ interface CustomLegendProps extends LegendProps {
 
 const CustomLegend: React.FC<CustomLegendProps> = ({ payload }) => {
   return (
-    <ul className="mt-2 flex justify-center gap-4">
+    <ul className="mt-2 flex flex-wrap justify-center gap-4">
       {payload?.map((entry, index) => (
         <li key={`item-${index}`} className="flex items-center gap-2">
           <span
