@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,11 +14,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
+
 import { getTaskType } from '@/lib/taskType';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
-import React, { useState } from 'react';
 
-export default function PromptModeToggle() {
+export default function EvalPromptTaskDropdown() {
   const taskIdList = ['1', '2', '3', '5', '6'];
   const { taskType, setTaskType } = usePromptEditContext();
 

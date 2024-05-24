@@ -1,30 +1,24 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 
-import { createPromptTemplate, finalizePrompt } from '@/helpers/prompt-api';
-import { usePromptArenaContext } from '@/store/prompt-arena-provider';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 
-import {
-  ICreatePromptTemplateRequest,
-  IFinalizePromptRequest,
-  Model,
-} from '@/types/prompts.types';
+import { finalizePrompt } from '@/helpers/prompt-api';
+import { IFinalizePromptRequest } from '@/types/prompts.types';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
 import { runEval } from '@/helpers/eval-api';
 
-type PromptInputProps = {
+type EvalArenaFooterProps = {
   isEdit?: boolean;
   id: string;
 };
 
-export default function PromptArenaFooter({
+export default function EvalArenaFooter({
   isEdit = false,
   id,
-}: PromptInputProps) {
+}: EvalArenaFooterProps) {
   const [isDisabled, setIsDisabled] = useState({
     isEvaluateDisabled: true,
     isSaveDisabled: true,
@@ -33,16 +27,16 @@ export default function PromptArenaFooter({
     evaluateLoading: false,
     savePromptLoading: false,
   });
-  const { openaiInput, geminiInput, variable,taskType } = usePromptEditContext();
+  const { openaiInput, geminiInput, variable, taskType } =
+    usePromptEditContext();
   const router = useRouter();
 
   useEffect(() => {
     if (isEdit) {
       if (
         (openaiInput.length === 0 && geminiInput.length === 0) ||
-        (variable.variable_name !== '' &&
-        variable.variable_value === '')
-       ) {
+        (variable.variable_name !== '' && variable.variable_value === '')
+      ) {
         setIsDisabled((prevState) => ({
           ...prevState,
           isSaveDisabled: true,
@@ -53,11 +47,8 @@ export default function PromptArenaFooter({
           isSaveDisabled: false,
         }));
       }
-    }
-    else{
-      if(variable.variable_name !== '' &&
-      variable.variable_value === '')
-      {
+    } else {
+      if (variable.variable_name !== '' && variable.variable_value === '') {
         setIsDisabled((prevState) => ({
           ...prevState,
           isEvaluateDisabled: true,
@@ -69,7 +60,7 @@ export default function PromptArenaFooter({
         }));
       }
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openaiInput, geminiInput, variable]);
 
   const handleSaveClick = async () => {
@@ -96,7 +87,6 @@ export default function PromptArenaFooter({
       console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
       router.push('/prompt-dashboard');
-
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
@@ -111,10 +101,9 @@ export default function PromptArenaFooter({
     setIsDisabled((prevState) => ({ ...prevState, isEvaluateDisabled: true }));
     setIsLoading((prevState) => ({ ...prevState, evaluateLoading: true }));
     try {
-      const data = await runEval(id,taskType);
+      const data = await runEval(id, taskType);
       toast.success('Ran Eval Successfully!');
       router.push('/eval-dashboard');
-
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
