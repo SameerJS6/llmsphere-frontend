@@ -8,34 +8,32 @@ import { TemperatureSelector } from '@/components/temperature';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
-import { IFrameworkModels } from '@/types/common.types';
 
 type EvalArenaRightColumnProps = {
   variable_name?: string;
   variable_value?: string;
-  openai_prompt?: string;
-  gemini_prompt?: string;
+  isOpenAI?: boolean;
+  isGemini?: boolean;
   isEdit?: boolean;
-  frameworks?: IFrameworkModels[];
 };
 
 export default function EvalArenaRightColumn({
   variable_name = '',
   variable_value = '',
-  openai_prompt = '',
-  gemini_prompt = '',
+  isOpenAI,
+  isGemini,
   isEdit = false,
 }: EvalArenaRightColumnProps) {
   let model = [];
-  {
-    if (!!openai_prompt) {
-      model.push('OpenAI');
-    }
 
-    if (!!gemini_prompt) {
-      model.push('Gemini');
-    }
+  if (isOpenAI) {
+    model.push('OpenAI');
   }
+
+  if (isGemini) {
+    model.push('Gemini');
+  }
+
   const [variableValue, setVariableValue] = useState(variable_value);
   const [variableName, setVariableName] = useState(variable_name);
   const { setVariable, openaiInput, geminiInput } = usePromptEditContext();

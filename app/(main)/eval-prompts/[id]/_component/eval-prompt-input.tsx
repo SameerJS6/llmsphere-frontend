@@ -7,7 +7,7 @@ import { usePromptEditContext } from '@/store/prompt-edit-provider';
 type EvalPromptInputProps = {
   promptText?: string;
   isEdit?: boolean;
-  model?: string;
+  model?: 'OpenAI' | 'Gemini';
 };
 
 export default function EvalPromptInput({

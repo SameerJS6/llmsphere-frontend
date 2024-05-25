@@ -14,7 +14,8 @@ export interface IPromptResponse extends TModels {
   created_date: string;
 }
 export interface IFinalizePromptRequest extends TModelsPrompts, TVariable {
-  prompt_id: string;
+  prompt_id?: string;
+  problem?: string;
 }
 export interface IFinalizePromptResponse {
   message: string;
@@ -22,6 +23,8 @@ export interface IFinalizePromptResponse {
 export interface IGetPromptResponse extends TModelsPrompts, TVariable, TModels {
   username: string;
   task_type?: string;
+  problem?: string;
+  created_at?: string;
 }
 
 interface TModels {
