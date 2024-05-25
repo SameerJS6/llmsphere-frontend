@@ -15,14 +15,12 @@ type EvalArenaFooterProps = {
   id: string;
   promptType: 'Problem statement' | 'Prompt';
   isEdit?: boolean;
-  id: string;
 };
 
 export default function EvalArenaFooter({
   id,
   promptType,
   isEdit = false,
-  id,
 }: EvalArenaFooterProps) {
   const [isDisabled, setIsDisabled] = useState({
     isEvaluateDisabled: true,
@@ -80,19 +78,10 @@ export default function EvalArenaFooter({
           promptType === 'Problem statement' ? '' : variable.variable_type,
         openai_prompt: openaiInput.length !== 0 ? openaiInput : '',
         gemini_prompt: geminiInput.length !== 0 ? geminiInput : '',
+        problem: openaiInput,
       };
-      // if (openaiInput.length !== 0) {
-      //   body.openai_prompt = openaiInput;
-      // } else {
-      //   body.openai_prompt = '';
-      // }
-      // if (geminiInput.length !== 0) {
-      //   body.gemini_prompt = geminiInput;
-      // } else {
-      //   body.gemini_prompt = '';
-      // }
+      //   console.log('Body: ', body);
       const data = await finalizePrompt(body);
-      console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
       router.push('/prompt-dashboard');
       revalidatePath('/prompt-dashboard');
