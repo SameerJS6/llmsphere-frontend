@@ -77,7 +77,7 @@ export default function PromptArenaFooter() {
       };
       const data = await createPromptTemplate(body);
       toast.success('Prompt Template Generated Successfully!');
-      router.push('/prompt-dashboard');
+      router.push(`/eval-prompts/${data?.id}?mode=edit`);
       revalidatePath('/prompt-dashboard');
     } catch (error) {
       console.error('Error while calling API:', error);
