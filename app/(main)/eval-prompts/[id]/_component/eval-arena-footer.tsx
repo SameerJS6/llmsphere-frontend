@@ -9,6 +9,7 @@ import { finalizePrompt } from '@/helpers/prompt-api';
 import { IFinalizePromptRequest } from '@/types/prompts.types';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
 import { runEval } from '@/helpers/eval-api';
+import { revalidatePath } from 'next/cache';
 
 type EvalArenaFooterProps = {
   id: string;
@@ -88,6 +89,7 @@ export default function EvalArenaFooter({
       await finalizePrompt(body);
       toast.success('Prompt Template Updated Successfully!');
       router.push('/prompt-dashboard');
+      revalidatePath('/prompt-dashboard');
       setOpenaiInput('');
       setGeminiInput('');
     } catch (error) {

@@ -8,6 +8,12 @@ import { TemperatureSelector } from '@/components/temperature';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type EvalArenaRightColumnProps = {
   variable_name?: string;
@@ -86,9 +92,18 @@ export default function EvalArenaRightColumn({
 
             {variableName && (
               <div className="space-y-2">
-                <span className="text-sm font-medium leading-none">
-                  {variableName}
-                </span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger className="ml-0 pl-0">
+                      <span className="line-clamp-2 text-left text-sm font-medium leading-none">
+                        {variableName}
+                      </span>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-sm">
+                      {variableName}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 <Textarea
                   value={variableValue}
                   onChange={(e) => handleInputChange(e.target.value)}
