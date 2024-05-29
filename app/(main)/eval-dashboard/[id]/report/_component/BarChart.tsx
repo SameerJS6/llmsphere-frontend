@@ -40,7 +40,9 @@ export default function LinearChart({ data }: ChartProps) {
   return (
     <Card className="w-full flex-1 xl:max-w-screen-sm">
       <CardHeader>
-        <CardTitle>Overview</CardTitle>
+        <CardTitle className="text-xl font-semibold tracking-tight">
+          Overview
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" minHeight={350}>

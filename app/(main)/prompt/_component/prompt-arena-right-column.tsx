@@ -7,17 +7,16 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
-import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { MultiSelect } from './multi-model-select';
-import { TemperatureSelector } from './temperature';
+import { TemperatureSelector } from '@/components/temperature';
 
 import { IFrameworkModels } from '@/types/common.types';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
-import { Textarea } from '@/components/ui/textarea';
 
 type PromptArenaRightColumnProps = {
   frameworks: IFrameworkModels[];

@@ -30,7 +30,7 @@ export const getEvalDashboard = async (): Promise<
       `${process.env.NEXT_PUBLIC_BASE_URL}/getevalforuser?username=nitindhir`,
       {
         method: 'GET',
-        cache: 'no-cache',
+        cache: 'no-store',
       }
     );
     var responseData = await res.text();

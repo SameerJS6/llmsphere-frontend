@@ -1,17 +1,21 @@
-import React, { useEffect } from 'react';
-
+import React from 'react';
 import { Metadata } from 'next';
 
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 
-import PromptArenaFooter from './_component/prompt-arena-footer';
-import PromptArenaRightColumn from './_component/prompt-arena-right-column';
+import EvalPromptInput from './_component/eval-prompt-input';
+import EvalArenaFooter from './_component/eval-arena-footer';
+import EvalArenaRightColumn from './_component/eval-arena-right-column';
+import EvalPromptTaskDropdown from './_component/eval-prompt-task-type';
+
 import { getPrompt } from '@/helpers/prompt-api';
-import PromptInput from './_component/prompt-input';
-import TaskTypeToggle from './_component/prompt-task-type';
 
-const metadata: Metadata = {
+type EvalPromptProps = {
+  params: { id: string };
+  searchParams?: { [key: string]: string | undefined };
+};
+
+export const metadata: Metadata = {
   title: 'Eval Prompt Arena',
   description: 'Run the eval prompt in the prompt arena',
 };
@@ -19,7 +23,6 @@ const metadata: Metadata = {
 async function getPromptById(id: string) {
   try {
     const data = await getPrompt(id);
-    //console.log(data, 'data');
     return data;
   } catch (error) {
     console.log('Error while fetching prompt data');
@@ -27,101 +30,95 @@ async function getPromptById(id: string) {
   }
 }
 
-export default async function IndivPromptArena({
+export default async function EvalPrompt({
   params,
   searchParams,
-}: {
-  params: { id: string };
-  searchParams?: { [key: string]: string | undefined };
-}) {
+}: EvalPromptProps) {
   const PromptData = await getPromptById(params.id);
   let isEdit: boolean = false;
-  if (searchParams?.mode === 'edit') {
-    isEdit = true;
-  } else {
-    isEdit = false;
-  }
-  // const [loading,setLoading] = useState<boolean>(false);
+  const promptType =
+    PromptData?.openai_prompt && PromptData.gemini_prompt
+      ? 'Prompt'
+      : 'Problem statement';
+  const isOpenAIUsed = !!PromptData?.OpenAI || !!PromptData?.openai_prompt;
+  const isGeminiUsed = !!PromptData?.gemini || !!PromptData?.gemini_prompt;
 
-  //   console.log(PromptData, 'from prompt');
-
-  // const { activePromptMode } = usePromptArenaContext();
-
+  searchParams?.mode === 'edit' ? (isEdit = true) : (isEdit = false);
   return (
     <div className="relative z-10 mt-8 space-y-8">
       <div className="flex items-center justify-between gap-4">
         <h2 className="bg-gradient-to-b from-foreground to-muted-foreground bg-clip-text text-2xl font-semibold tracking-tight text-transparent">
-          Prompt Arena
+          Evaluate Prompt
         </h2>
-        {!isEdit && <TaskTypeToggle />}
-
-        {/* <PromptModeToggle /> */}
+        {!isEdit && <EvalPromptTaskDropdown />}
       </div>
       <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_300px]">
         <div className="space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground">
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="relative h-full">
-              <Label htmlFor="key">OpenAI</Label>
-              <PromptInput
-                isEdit={isEdit}
-                promptText={PromptData?.openai_prompt}
-                model="OpenAI"
-              />
+          {promptType === 'Problem statement' && (
+            <div className="flex flex-col gap-4 lg:flex-row">
+              {PromptData?.OpenAI && (
+                <div className="relative h-full flex-1 space-y-2">
+                  <Label htmlFor="key">OpenAI Problem Statement</Label>
+                  <EvalPromptInput
+                    isEdit={isEdit}
+                    promptText={
+                      !PromptData.openai_prompt
+                        ? PromptData?.OpenAI
+                        : PromptData.openai_prompt
+                    }
+                    model="OpenAI"
+                  />
+                </div>
+              )}
+
+              {PromptData?.gemini && (
+                <div className="relative h-full flex-1 space-y-2">
+                  <Label htmlFor="key">Gemini Problem Statement</Label>
+                  <EvalPromptInput
+                    isEdit={isEdit}
+                    promptText={
+                      !PromptData.gemini_prompt
+                        ? PromptData?.gemini
+                        : PromptData.gemini_prompt
+                    }
+                    model="Gemini"
+                  />
+                </div>
+              )}
             </div>
-            <div className="relative h-full">
-              <Label htmlFor="key">Gemini</Label>
-              <PromptInput
-                isEdit={isEdit}
-                promptText={PromptData?.gemini_prompt}
-                model="Gemini"
-              />
+          )}
+
+          {promptType === 'Prompt' && (
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="relative h-full space-y-2">
+                <Label htmlFor="key">OpenAI</Label>
+                <EvalPromptInput
+                  isEdit={isEdit}
+                  promptText={PromptData?.openai_prompt}
+                  model="OpenAI"
+                />
+              </div>
+
+              <div className="relative h-full space-y-2">
+                <Label htmlFor="key">Gemini</Label>
+                <EvalPromptInput
+                  isEdit={isEdit}
+                  promptText={PromptData?.gemini_prompt}
+                  model="Gemini"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
-        <PromptArenaRightColumn
+        <EvalArenaRightColumn
           variable_name={PromptData?.variable_name}
           variable_value={PromptData?.variable_value}
-          openai_prompt={PromptData?.openai_prompt}
-          gemini_prompt={PromptData?.gemini_prompt}
+          isOpenAI={isOpenAIUsed}
+          isGemini={isGeminiUsed}
           isEdit={isEdit}
         />
       </div>
-
-      {/* <div className="grid grid-cols-5 gap-4">
-        <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
-          <div className="flex justify-between gap-4">
-            <Label htmlFor="key">OpenAI</Label>
-          </div>
-          <PromptInput
-            isEdit={isEdit}
-            promptText={PromptData?.openai_prompt}
-            model="OpenAI"
-          />
-        </div>
-
-        <div className="col-span-5 space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground lg:col-span-2">
-          <div className="flex justify-between gap-4">
-            <Label htmlFor="key">Gemini</Label>
-          </div>
-          <PromptInput
-            isEdit={isEdit}
-            promptText={PromptData?.gemini_prompt}
-            model="Gemini"
-          />
-        </div>
-
-        <div className="max-lg:col-span-5 ">
-          <PromptArenaRightColumn
-            variable_name={PromptData?.variable_name}
-            variable_value={PromptData?.variable_value}
-            openai_prompt={PromptData?.openai_prompt}
-            gemini_prompt={PromptData?.gemini_prompt}
-            task_type={PromptData?.task_type}
-            isEdit={isEdit}
-          />{' '}
-        </div>
-      </div> */}
-      <PromptArenaFooter isEdit={isEdit} id={params.id} />
+      <EvalArenaFooter isEdit={isEdit} id={params.id} promptType={promptType} />
     </div>
   );
 }

@@ -1,23 +1,23 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+
 import { Textarea } from '@/components/ui/textarea';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
 
-type PromptInputProps = {
+type EvalPromptInputProps = {
   promptText?: string;
   isEdit?: boolean;
-  model?: string;
+  model?: 'OpenAI' | 'Gemini';
 };
 
-export default function PromptInput({
+export default function EvalPromptInput({
   promptText,
   isEdit = false,
   model = 'OpenAI',
-}: PromptInputProps) {
+}: EvalPromptInputProps) {
+  const [inputValue, setInputValue] = useState<string>(promptText ?? '');
   const { setOpenaiInput, setGeminiInput, setVariable } =
     usePromptEditContext();
-
-  const [inputValue, setInputValue] = useState<string>(promptText ?? '');
 
   useEffect(() => {
     if (promptText) {

@@ -1,8 +1,14 @@
+import Link from 'next/link';
+
 import LLMCard from './_components/llmcard';
 import IntegrateButton from './_components/IntegrateButton';
-import { redirect } from 'next/navigation'
-import { getCredentials } from '@/helpers/auth';
+
+import { Button } from '@/components/ui/button';
+
+import { ArrowRight } from 'lucide-react';
 import { PlusCircledIcon } from '@radix-ui/react-icons';
+
+import { getCredentials } from '@/helpers/auth';
 
 let openai = '';
 let googleai = '';
@@ -15,18 +21,15 @@ async function fetchData() {
       if (data?.credentials?.Google_AI) googleai = data?.credentials?.Google_AI;
       else if (data?.credentials?.Google_AIStudio)
         googleai = data?.credentials?.Google_AIStudio;
-      
     }
-    } catch (error) {
+  } catch (error) {
     console.error('Error fetching data:', error);
   }
-} 
+}
 
 export default async function SetupScreen() {
   await fetchData();
-  if(openai && googleai){
-    redirect('/prompt')
-  }
+  const isIntegrated: boolean = !!openai && !!googleai;
   return (
     <>
       <main className="relative flex min-h-[calc(100dvh-68px)] w-full flex-col justify-center bg-dot-black/[0.2] dark:bg-dot-white/[0.2]">
@@ -76,7 +79,15 @@ export default async function SetupScreen() {
             />
           </div>
           <div className="text-right">
-            <IntegrateButton />
+            {isIntegrated ? (
+              <Button className="gap-2" asChild>
+                <Link href="/prompt">
+                  Go to Prompt Arena <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+            ) : (
+              <IntegrateButton />
+            )}
           </div>
         </div>
       </main>

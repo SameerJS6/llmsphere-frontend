@@ -12,6 +12,7 @@ import {
   IFinalizePromptRequest,
   Model,
 } from '@/types/prompts.types';
+import { revalidatePath } from 'next/cache';
 
 export default function PromptArenaFooter() {
   const [isDisabled, setIsDisabled] = useState({
@@ -22,10 +23,15 @@ export default function PromptArenaFooter() {
     generateLoading: false,
     savePromptLoading: false,
   });
-  const { activePromptMode, openaiInput, selected, geminiInput, variable } =
-    usePromptArenaContext();
-    const router = useRouter();
-
+  const {
+    activePromptMode,
+    openaiInput,
+    selected,
+    geminiInput,
+    variable,
+    setOpenaiInput,
+  } = usePromptArenaContext();
+  const router = useRouter();
   useEffect(() => {
     if (activePromptMode === 'problem') {
       if (openaiInput.length === 0) {
@@ -42,8 +48,7 @@ export default function PromptArenaFooter() {
     } else {
       if (
         (openaiInput.length === 0 && geminiInput.length === 0) ||
-        (variable.variable_name !== '' &&
-        variable.variable_value === '')
+        (variable.variable_name !== '' && variable.variable_value === '')
       ) {
         setIsDisabled((prevState) => ({
           ...prevState,
@@ -76,10 +81,10 @@ export default function PromptArenaFooter() {
         models: models,
       };
       const data = await createPromptTemplate(body);
-      //console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Generated Successfully!');
-      router.push('/prompt-dashboard');
-
+      router.push(`/eval-prompts/${data?.id}?mode=edit`);
+      revalidatePath('/prompt-dashboard');
+      setOpenaiInput('');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
@@ -111,6 +116,7 @@ export default function PromptArenaFooter() {
         body.gemini_prompt = '';
       }
       const data = await finalizePrompt(body);
+      console.log(data);
       //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
       router.push('/prompt-dashboard');
