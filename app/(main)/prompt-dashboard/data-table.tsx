@@ -22,6 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { downloadToExcel } from '@/lib/xlsx';
 import { UploadIcon } from '@radix-ui/react-icons';
+import { usePromptEditContext } from '@/store/prompt-edit-provider';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,7 +37,9 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
-
+  const {setOpenaiInput,setGeminiInput}=usePromptEditContext();
+  setOpenaiInput('');
+  setGeminiInput('');
   const table = useReactTable({
     data,
     columns,

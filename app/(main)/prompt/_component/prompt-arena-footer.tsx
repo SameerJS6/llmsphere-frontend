@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-
+import { useRouter } from 'next/navigation';
 import { createPromptTemplate, finalizePrompt } from '@/helpers/prompt-api';
 import { usePromptArenaContext } from '@/store/prompt-arena-provider';
 
@@ -12,7 +12,6 @@ import {
   IFinalizePromptRequest,
   Model,
 } from '@/types/prompts.types';
-import { useRouter } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
 export default function PromptArenaFooter() {
@@ -120,6 +119,8 @@ export default function PromptArenaFooter() {
       console.log(data);
       //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
+      router.push('/prompt-dashboard');
+
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
