@@ -25,7 +25,6 @@ export default async function Dashboard() {
   };
 
   const response = await getDashboardPrompt();
-
   const filteredResponse: TDashboardColumn[] =
     response?.map((item) => {
       return {

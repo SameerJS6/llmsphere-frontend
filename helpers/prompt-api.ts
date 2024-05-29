@@ -30,7 +30,7 @@ export const getPrompt = async (
       `${process.env.NEXT_PUBLIC_BASE_URL}/getprompt?prompt_id=${prompt_id}`,
       {
         method: 'GET',
-        cache: 'no-cache',
+        cache: 'no-store',
       }
     );
     const responseData = await res.json();

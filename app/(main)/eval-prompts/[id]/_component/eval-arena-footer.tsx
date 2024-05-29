@@ -9,7 +9,6 @@ import { finalizePrompt } from '@/helpers/prompt-api';
 import { IFinalizePromptRequest } from '@/types/prompts.types';
 import { usePromptEditContext } from '@/store/prompt-edit-provider';
 import { runEval } from '@/helpers/eval-api';
-import { revalidatePath } from 'next/cache';
 
 type EvalArenaFooterProps = {
   id: string;
@@ -30,8 +29,14 @@ export default function EvalArenaFooter({
     evaluateLoading: false,
     savePromptLoading: false,
   });
-  const { openaiInput, geminiInput, variable, taskType } =
-    usePromptEditContext();
+  const {
+    openaiInput,
+    geminiInput,
+    variable,
+    taskType,
+    setGeminiInput,
+    setOpenaiInput,
+  } = usePromptEditContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -78,13 +83,13 @@ export default function EvalArenaFooter({
           promptType === 'Problem statement' ? '' : variable.variable_type,
         openai_prompt: openaiInput.length !== 0 ? openaiInput : '',
         gemini_prompt: geminiInput.length !== 0 ? geminiInput : '',
-        problem: openaiInput,
       };
       //   console.log('Body: ', body);
-      const data = await finalizePrompt(body);
+      await finalizePrompt(body);
       toast.success('Prompt Template Updated Successfully!');
       router.push('/prompt-dashboard');
-      revalidatePath('/prompt-dashboard');
+      setOpenaiInput('');
+      setGeminiInput('');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
@@ -95,6 +100,7 @@ export default function EvalArenaFooter({
       }));
     }
   };
+
   const handleEvaluateClick = async () => {
     setIsDisabled((prevState) => ({ ...prevState, isEvaluateDisabled: true }));
     setIsLoading((prevState) => ({ ...prevState, evaluateLoading: true }));
