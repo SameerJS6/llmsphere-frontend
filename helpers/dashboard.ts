@@ -7,7 +7,7 @@ export const getDashboardPrompt = async (): Promise<TDashboard[] | null> => {
       `${process.env.NEXT_PUBLIC_BASE_URL}/getpromptforuser?username=nitindhir`,
       {
         method: 'GET',
-        cache: 'no-cache',
+        cache: 'no-store',
       }
     );
     const responseData = await res.json();
