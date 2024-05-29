@@ -36,8 +36,10 @@ export default async function EvalPrompt({
 }: EvalPromptProps) {
   const PromptData = await getPromptById(params.id);
   let isEdit: boolean = false;
-  const promptType = !!PromptData?.problem ? 'Problem statement' : 'Prompt';
-
+  const promptType =
+    PromptData?.openai_prompt && PromptData.gemini_prompt
+      ? 'Prompt'
+      : 'Problem statement';
   const isOpenAIUsed = !!PromptData?.OpenAI || !!PromptData?.openai_prompt;
   const isGeminiUsed = !!PromptData?.gemini || !!PromptData?.gemini_prompt;
 
@@ -52,17 +54,41 @@ export default async function EvalPrompt({
       </div>
       <div className="grid h-full items-stretch gap-6 md:grid-cols-[1fr_300px]">
         <div className="space-y-4 rounded-lg border border-border bg-accent p-4 text-accent-foreground">
-          {PromptData?.problem && (
-            <div className="relative h-full space-y-2">
-              <Label htmlFor="key">Problem Statement</Label>
-              <EvalPromptInput
-                isEdit={isEdit}
-                promptText={PromptData?.problem}
-                model="OpenAI"
-              />
+          {promptType === 'Problem statement' && (
+            <div className="flex flex-col gap-4 lg:flex-row">
+              {PromptData?.OpenAI && (
+                <div className="relative h-full flex-1 space-y-2">
+                  <Label htmlFor="key">OpenAI Problem Statement</Label>
+                  <EvalPromptInput
+                    isEdit={isEdit}
+                    promptText={
+                      !PromptData.openai_prompt
+                        ? PromptData?.OpenAI
+                        : PromptData.openai_prompt
+                    }
+                    model="OpenAI"
+                  />
+                </div>
+              )}
+
+              {PromptData?.gemini && (
+                <div className="relative h-full flex-1 space-y-2">
+                  <Label htmlFor="key">Gemini Problem Statement</Label>
+                  <EvalPromptInput
+                    isEdit={isEdit}
+                    promptText={
+                      !PromptData.gemini_prompt
+                        ? PromptData?.gemini
+                        : PromptData.gemini_prompt
+                    }
+                    model="Gemini"
+                  />
+                </div>
+              )}
             </div>
           )}
-          {!PromptData?.problem && (
+
+          {promptType === 'Prompt' && (
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="relative h-full space-y-2">
                 <Label htmlFor="key">OpenAI</Label>
@@ -72,6 +98,7 @@ export default async function EvalPrompt({
                   model="OpenAI"
                 />
               </div>
+
               <div className="relative h-full space-y-2">
                 <Label htmlFor="key">Gemini</Label>
                 <EvalPromptInput
