@@ -24,8 +24,14 @@ export default function PromptArenaFooter() {
     generateLoading: false,
     savePromptLoading: false,
   });
-  const { activePromptMode, openaiInput, selected, geminiInput, variable } =
-    usePromptArenaContext();
+  const {
+    activePromptMode,
+    openaiInput,
+    selected,
+    geminiInput,
+    variable,
+    setOpenaiInput,
+  } = usePromptArenaContext();
   const router = useRouter();
   useEffect(() => {
     if (activePromptMode === 'problem') {
@@ -79,6 +85,7 @@ export default function PromptArenaFooter() {
       toast.success('Prompt Template Generated Successfully!');
       router.push(`/eval-prompts/${data?.id}?mode=edit`);
       revalidatePath('/prompt-dashboard');
+      setOpenaiInput('');
     } catch (error) {
       console.error('Error while calling API:', error);
     } finally {
@@ -110,6 +117,7 @@ export default function PromptArenaFooter() {
         body.gemini_prompt = '';
       }
       const data = await finalizePrompt(body);
+      console.log(data);
       //   console.log('RESPONSE DATA: ' + JSON.stringify(data));
       toast.success('Prompt Template Updated Successfully!');
     } catch (error) {
